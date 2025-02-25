@@ -1,0 +1,4 @@
+name: flutter_monorepo
+packages:
+  - apps/*
+  - packages/*
