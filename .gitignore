@@ -1,0 +1,66 @@
+# General
+.DS_Store
+*.log
+*.lock
+*.swp
+*.swo
+*.swn
+
+# Archivos de configuración y caché
+.dart_tool/
+.vscode/
+.idea/
+.metadata
+.packages
+pubspec.lock
+.flutter-plugins
+.flutter-plugins-dependencies
+.dart_tool/
+.ios/
+.android/
+
+# Dependencias y builds
+build/
+node_modules/
+coverage/
+*.iml
+.gradle/
+pubspec.lock
+*.log
+
+# Flutter Web y Desktop
+web/
+linux/
+windows/
+macos/
+
+# Claves y credenciales sensibles
+*.jks
+*.keystore
+*.p12
+.env
+.env.*
+android/key.properties
+ios/Runner/GoogleService-Info.plist
+android/app/google-services.json
+
+# Archivos de depuración y logs
+*.log
+*.gz
+*.lock
+*.bak
+*.tmp
+*.swp
+*.swo
+*.swn
+*.history
+
+# Archivos específicos de monorepo
+*/.flutter-plugins
+*/.flutter-plugins-dependencies
+*/.dart_tool/
+*/.packages
+*/build/
+*/.vscode/
+*/pubspec.lock
+*/.gradle/
