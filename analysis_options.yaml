@@ -1,0 +1,47 @@
+# analysis_options.yaml
+include: package:flutter_lints/flutter.yaml  # Incluye reglas estándar de Flutter
+
+analyzer:
+  # Habilitar análisis fuerte (null safety)
+  strong-mode:
+    implicit-casts: false  # Evita conversiones implícitas de tipos
+    implicit-dynamic: false  # Evita el uso de `dynamic` implícito
+
+  # Excluir archivos generados automáticamente
+  exclude:
+    - "**/*.g.dart"  # Archivos generados por build_runner
+    - "**/*.freezed.dart"  # Archivos generados por freezed
+    - "**/*.mocks.dart"  # Archivos generados por mockito
+    - "**/generated/**"  # Carpetas generadas
+
+  # Habilitar reglas adicionales de análisis
+  language:
+    strict-casts: true  # Evita conversiones inseguras
+    strict-inference: true  # Evita inferencias inseguras
+    strict-raw-types: true  # Evita tipos raw (sin genéricos)
+
+  # Configuración de errores y advertencias
+  errors:
+    unused_element: error  # Elementos no utilizados
+    unused_import: error  # Importes no utilizados
+    unused_local_variable: error  # Variables locales no utilizadas
+    dead_code: error  # Código inalcanzable
+    invalid_assignment: error  # Asignaciones inválidas
+    missing_required_param: error  # Parámetros requeridos faltantes
+    missing_return: error  # Retornos faltantes
+    unnecessary_null_comparison: error  # Comparaciones innecesarias con null
+    use_build_context_synchronously: error  # Uso incorrecto de BuildContext
+
+linter:
+  rules:
+    # Reglas de estilo y buenas prácticas
+    - always_declare_return_types  # Declarar siempre el tipo de retorno
+    - avoid_print  # Evitar el uso de `print` en producción
+    - prefer_const_constructors  # Preferir constructores `const`
+    - prefer_final_fields  # Preferir campos finales
+    - use_build_context_synchronously  # Usar BuildContext de manera segura
+    - avoid_empty_else  # Evitar bloques `else` vacíos
+    - avoid_unnecessary_containers  # Evitar contenedores innecesarios
+    - prefer_is_empty  # Preferir `isEmpty` sobre `length == 0`
+    - prefer_is_not_empty  # Preferir `isNotEmpty` sobre `length > 0`
+    # Más reglas...

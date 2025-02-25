@@ -1,4 +1,76 @@
-## Flujo de Trabajo Recomendado
+# 🏗 Base Structure - FLUTTER_MONOREPO
+
+Este repositorio define la estructura base para un **monorepo en Flutter** siguiendo las mejores prácticas de **Clean Architecture**, **BLoC** para el manejo de estado y **GetIt + Injectable** para la inyección de dependencias.
+
+## 📂 Estructura del Monorepo
+
+```plaintext
+flutter_monorepo/
+│── apps/                         # Aplicaciones dentro del monorepo
+│   ├── app1/                     # Primera aplicación
+│   │   ├── lib/
+│   │   │   ├── src/
+│   │   │   │   ├── features/      # Features exclusivas de app1
+│   │   │   │   ├── config/        # Configuraciones generales (temas, rutas, etc.)
+│   │   │   │   ├── injection.dart # Configuración de dependencias con GetIt e Injectable
+│   ├── app2/                     # Segunda aplicación (estructura similar a app1)
+│
+│── packages/                     # Paquetes reutilizables dentro del monorepo
+│   ├── core/                     # Funcionalidades transversales y bases
+│   │   ├── core_utils/           # Extensiones, helpers y validadores
+│   │   ├── core_ui/              # Componentes de UI reutilizables (temas, widgets)
+│   │   ├── core_network/         # Cliente HTTP, interceptores y manejo de API
+│   │   ├── core_database/        # Configuración y manejo de base de datos local
+│   ├── domain/                   # Entidades y casos de uso (capa de dominio compartida)
+│   ├── data/                     # Implementación de repositorios y fuentes de datos
+│   ├── feature_shared1/          # Feature reutilizable en varias apps
+│   ├── feature_shared2/          # Otra feature compartida
+│
+│── tools/                        # Scripts de automatización y herramientas de desarrollo
+│   ├── scripts/                  # Scripts para generación de código, CI/CD, etc.
+│
+│── pubspec.yaml                  # Dependencias generales del monorepo
+│── melos.yaml                     # Configuración de Melos para la gestión del monorepo
+│── melos_scripts.yaml             # Scripts de melos separados
+│── LICENSE                         # Licensia MIT
+│── .gitignore                      # Configuración global de git
+│── analysis_options.yaml          # Configuración global de reglas de linting y análisis estático
+│── README.md                     #
+```
+
+## 🏛 Principios de la Arquitectura
+
+Este monorepo sigue **Clean Architecture**, separando responsabilidades en capas bien definidas:
+
+### 1️⃣ **Apps (`apps/`)**
+Cada aplicación se encuentra dentro de `apps/` y contiene sus propias features exclusivas. Si una feature es compartida entre varias apps, se extrae como un paquete en `packages/`.
+
+### 2️⃣ **Paquetes Compartidos (`packages/`)**
+Los paquetes en `packages/` contienen módulos reutilizables:
+- **`core/`** → Funcionalidades transversales como UI, utils, manejo de red y base de datos.
+- **`domain/`** → Entidades y casos de uso compartidos.
+- **`data/`** → Implementación de repositorios y fuentes de datos.
+- **`feature_sharedX/`** → Features reutilizables entre varias apps.
+
+### 3️⃣ **Herramientas (`tools/`)**
+Aquí se ubican scripts de automatización, generación de código y configuraciones de CI/CD.
+
+## 📖 Contribuir
+
+Si agregas una nueva feature que será usada en varias apps, colócala en `packages/feature_sharedX/`. Si solo será usada en una app, mantenla dentro de `apps/appX/lib/src/features/`.
+
+## 🚀 Beneficios de esta estructura
+✔ Facilita la **reutilización de código** entre múltiples apps.
+✔ Mantiene un **flujo modular y escalable**.
+✔ Implementa **Clean Architecture** para separar responsabilidades.
+✔ Usa **Melos** para gestionar paquetes eficientemente.
+
+---
+
+Cualquier duda o sugerencia, ¡bienvenido a contribuir! 💙
+
+
+## 📖 Flujo de Trabajo Recomendado
 
 Este flujo de trabajo está diseñado para ayudarte a gestionar el monorepo de manera eficiente, desde la configuración inicial hasta la implementación de cambios. Sigue estos pasos para mantener un código limpio, funcional y bien estructurado.
 
