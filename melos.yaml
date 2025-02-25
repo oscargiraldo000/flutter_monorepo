@@ -1,4 +1,24 @@
 name: flutter_monorepo
+
+# Define los paquetes dentro del monorepo
 packages:
-  - apps/*
-  - packages/*
+  - apps/* # Ruta donde están las aplicaciones
+  - packages/* # Ruta donde están los paquetes
+
+# Configuración de comandos
+command:
+  bootstrap:
+    usePubspecOverrides: true # Respeta las sobrescrituras y vincula correctamente los paquetes locales
+    runPubGetInParallel: true # Instala dependencias en paralelo para acelerar melos bootstrap.
+    generateIntelliJIdeFiles: true # Genera archivos de configuración para IDEs como IntelliJ y Android Studio.
+  version:
+    workspaceChangelog: true # Genera un changelog a nivel global del monorepo
+
+# Configuración para IDEs
+ide:
+  vscode:
+    workspace: true # Genera automáticamente la configuración de espacio de trabajo para VS Code
+
+
+# Importa los scripts desde un archivo externo
+include: melos_scripts.yaml

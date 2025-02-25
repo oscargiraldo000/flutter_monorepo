@@ -1,0 +1,62 @@
+scripts:
+  # 🔹 Configuración inicial del monorepo
+  setup:
+    run: melos bootstrap
+    description: "Instala todas las dependencias del monorepo y configura los paquetes"
+
+  # 🔹 Limpieza de caché y builds
+  clean:
+    run: melos exec -- flutter clean
+    description: "Limpia todos los builds y cachés en los paquetes"
+
+  # 🔹 Verifica que todas las dependencias estén correctamente instaladas
+  check-dependencies:
+    run: melos exec -- flutter pub get
+    description: "Verifica que todas las dependencias estén actualizadas"
+
+  # 🔹 Análisis de código en todo el monorepo
+  analyze:
+    run: melos exec -- flutter analyze .
+    description: "Ejecuta análisis estático en todos los paquetes"
+
+  # 🔹 Formateo de código
+  format:
+    run: melos exec -- dart format . --set-exit-if-changed
+    description: "Formatea el código en todos los paquetes según las reglas de Dart"
+
+  # 🔹 Ejecuta pruebas en todos los paquetes
+  test:
+    run: melos exec -- flutter test
+    description: "Ejecuta todas las pruebas en los paquetes del monorepo"
+
+  # 🔹 Ejecuta pruebas con cobertura y genera un informe
+  test-coverage:
+    run: |
+      melos exec -- flutter test --coverage
+      genhtml coverage/lcov.info -o coverage/html
+    description: "Ejecuta las pruebas con cobertura y genera un informe"
+
+  # 🔹 Actualización de dependencias en todo el monorepo
+  upgrade:
+    run: melos exec -- flutter pub upgrade
+    description: "Actualiza todas las dependencias en los paquetes"
+
+  # 🔹 Generación de código (para paquetes que usen build_runner)
+  build-runner:
+    run: melos exec -- dart run build_runner build --delete-conflicting-outputs
+    description: "Genera código automáticamente en todos los paquetes"
+
+  # 🔹 Verificación de errores en la generación de código
+  check-build-runner:
+    run: melos exec -- dart run build_runner check
+    description: "Verifica si los archivos generados con build_runner están actualizados"
+
+  # 🔹 Corrección automática de errores en el código
+  fix:
+    run: melos exec -- dart fix --apply
+    description: "Aplica correcciones automáticas en el código de todos los paquetes"
+
+  # 🔹 Ejecuta build_runner en modo observador
+  generate:
+    run: melos exec -- dart run build_runner watch
+    description: "Ejecuta build_runner en modo observador para generar código automáticamente"
