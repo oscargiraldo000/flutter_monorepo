@@ -1,0 +1,1 @@
+export 'qr_mapper.dart';
