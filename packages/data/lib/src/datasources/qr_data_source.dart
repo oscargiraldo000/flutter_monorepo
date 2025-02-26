@@ -2,15 +2,15 @@ import 'package:core/core.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:hive/hive.dart';
-import 'package:injectable/injectable.dart';
 
-@lazySingleton
+//@lazySingleton
 class QRDataSource {
-  //final Box<QRModel> _qrBox = Hive.box<QRModel>('qr_box');
+  // Getter para acceder a la caja de Hive
+  Box<QRModel> get _qrBox => Hive.box<QRModel>('qr_box');
 
-  final Box<QRModel> _qrBox;
+  //final Box<QRModel> _qrBox;
 
-  QRDataSource(this._qrBox); // Inyectar la caja de Hive
+  //QRDataSource(this._qrBox); // Inyectar la caja de Hive
 
   /// Guarda una entidad de código QR en la base de datos
   Future<void> saveQRCode(QREntity entity) async {

@@ -1,4 +1,4 @@
-library core;
+library;
 
 export 'src/database/database.dart';
 export 'src/di/injection.dart';

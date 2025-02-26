@@ -15,11 +15,11 @@ class InvalidQRCodeException extends DomainException {
 /// Excepción lanzada cuando no se puede guardar el código QR.
 class SaveQRCodeException extends DomainException {
   /// Constructor que inicializa la excepción con un mensaje de error.
-  SaveQRCodeException(String message) : super(message);
+  SaveQRCodeException(super.message);
 }
 
 /// Excepción lanzada cuando no se puede obtener el historial de códigos QR.
 class GetHistoryException extends DomainException {
   /// Constructor que inicializa la excepción con un mensaje de error.
-  GetHistoryException(String message) : super(message);
+  GetHistoryException(super.message);
 }

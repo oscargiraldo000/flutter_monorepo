@@ -1,4 +1,4 @@
-library domain;
+library;
 
 export 'src/entities/entities.dart'; // Exporta las entidades del dominio.
 export 'src/exceptions/domain_exceptions.dart'; // Exporta las excepciones del dominio.

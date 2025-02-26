@@ -1,4 +1,4 @@
-library data;
+library;
 
 export 'src/datasources/datasources.dart';
 export 'src/di/data_module.dart';

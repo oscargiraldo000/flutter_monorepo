@@ -1,4 +1,24 @@
-// lib/core/initialization/hive_initializer.dart
+import 'package:data/data.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+
+class HiveInitializer {
+  // Método estático para inicializar Hive
+  static Future<void> initialize() async {
+    // Obtener el directorio de la aplicación para almacenar las cajas de Hive
+    final appDocumentDirectory = await getApplicationDocumentsDirectory();
+    Hive.init(appDocumentDirectory.path);
+
+    // Registrar adaptadores para los modelos
+    Hive.registerAdapter(QRModelAdapter());
+
+    // Abrir la caja (box) que se va a utilizar
+    await Hive.openBox<QRModel>('qr_box');
+  }
+}
+
+
+/**
 import 'package:data/data.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -19,3 +39,4 @@ class HiveInitializer {
   /// Obtener la instancia de la caja de QRModel
   static Box<QRModel> get qrBox => _qrBox;
 }
+ */

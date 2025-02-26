@@ -3,12 +3,12 @@ import 'package:domain/domain.dart';
 import 'package:injectable/injectable.dart';
 
 /// Caso de uso para obtener el historial de códigos QR.
-@lazySingleton
+//@lazySingleton
 class GetQRHistory {
-  final QRRepository repository;
+  final QRRepository repository = QRRepositoryImpl();
 
   /// Constructor que recibe una instancia de [QRRepository].
-  GetQRHistory(this.repository);
+  //GetQRHistory(this.repository);
 
   /// Llama al repositorio para obtener la lista de historiales de códigos QR.
   ///

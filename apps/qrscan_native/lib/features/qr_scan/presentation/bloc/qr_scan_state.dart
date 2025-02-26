@@ -14,13 +14,13 @@ class QRLoading extends QRScanState {}
 
 /// Estado cuando el escaneo de QR ha sido exitoso.
 class QRScannedSuccess extends QRScanState {
-  final String scannedCode;
+  final String code;
 
   /// Constructor que inicializa el estado con el código QR escaneado.
-  QRScannedSuccess(this.scannedCode);
+  QRScannedSuccess(this.code);
 
   @override
-  List<Object?> get props => [scannedCode];
+  List<Object?> get props => [code];
 }
 
 /// Estado cuando el historial de escaneos de QR está cargando.

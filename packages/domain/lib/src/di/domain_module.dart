@@ -1,7 +1,8 @@
 import 'package:domain/domain.dart';
 import 'package:injectable/injectable.dart';
 
-@module
+/**
+ @module
 abstract class DomainModule {
   @lazySingleton
   SaveQRCode get saveQRCode => SaveQRCode(sl<QRRepository>());
@@ -9,3 +10,4 @@ abstract class DomainModule {
   @lazySingleton
   GetQRHistory get getQRHistory => GetQRHistory(sl<QRRepository>());
 }
+ */

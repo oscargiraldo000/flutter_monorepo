@@ -1,17 +1,25 @@
+import 'dart:math';
+
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:injectable/injectable.dart';
 
-@LazySingleton(as: QRRepository)
+//@LazySingleton(as: QRRepository)
 class QRRepositoryImpl implements QRRepository {
-  final QRDataSource _qrDataSource;
+  final QRDataSource _qrDataSource = QRDataSource();
 
-  QRRepositoryImpl(this._qrDataSource);
+  //QRRepositoryImpl(this._qrDataSource);
 
   /// Guarda una entidad de código QR utilizando el data source
   @override
   Future<void> saveQRCode(QREntity entity) async {
     try {
+      if(entity.code.isEmpty) {
+        throw InvalidQRCodeException();
+      }
+      if(entity.timestamp.isBefore(DateTime(2000))) {
+        throw InvalidQRCodeException();
+      }
       await _qrDataSource.saveQRCode(entity);
     } catch (e) {
       throw DataException('Error al guardar el código QR: $e');

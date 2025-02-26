@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:qrscan_native/features/qr_scan/presentation/bloc/qr_scan_bloc.dart';
 
-import 'injection.config.dart';
+//import 'injection.config.dart';
 
 final getIt = GetIt.instance;
 
@@ -12,7 +12,7 @@ final getIt = GetIt.instance;
   asExtension: true,
 )
 void configureDependencies() {
-  getIt.registerSingleton(() => QRScanBloc(saveQRCode: null));
+  //getIt.registerSingleton(() => QRScanBloc(saveQRCode: null));
 
-  getIt.init();
+  //getIt.init();
 }
