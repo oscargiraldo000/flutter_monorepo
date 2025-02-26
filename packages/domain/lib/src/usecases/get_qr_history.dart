@@ -15,11 +15,9 @@ class GetQRHistory {
   /// Retorna una lista de objetos [QrHistory].
   Future<List<QREntity>> call() async {
     try {
+      //print('GetQRHistory.call');
       final qrHistoryList = await repository.getHistory();
-      if (qrHistoryList.isEmpty) {
-        //throw NotFoundException(); // Validación de datos
-        return [];
-      }
+      //print('GetQRHistory.call $qrHistoryList');
       return qrHistoryList;
     } on DataException catch (e) {
       throw DomainException(
