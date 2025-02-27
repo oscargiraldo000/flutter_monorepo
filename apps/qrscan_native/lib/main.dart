@@ -8,7 +8,6 @@ import 'package:qrscan_native/features/qr/blocs/qrscan/qrscan_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   // Inicializa Hive
   await HiveInitializer.initialize();
 
@@ -19,13 +18,9 @@ void main() async {
     MultiProvider(
       providers: [
         // Proporciona un Bloc para QRScan
-        BlocProvider<QRScanBloc>(
-          create: (_) => QRScanBloc(),
-        ),
+        BlocProvider<QRScanBloc>(create: (_) => QRScanBloc()),
         // Proporciona un Bloc para QRHistory
-        BlocProvider<QRHistoryBloc>(
-          create: (context) => QRHistoryBloc()..add(LoadHistory()),
-        ),
+        BlocProvider<QRHistoryBloc>(create: (context) => QRHistoryBloc()..add(LoadHistory())),
       ],
       child: const MyApp(),
     ),

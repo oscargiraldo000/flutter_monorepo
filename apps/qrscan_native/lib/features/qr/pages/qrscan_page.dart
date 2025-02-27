@@ -1,10 +1,9 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qrscan_native/features/qr/blocs/qrhistory/qrhistory_bloc.dart';
-import 'package:qrscan_native/pigeons/pigeon_plugin.dart';
-import '../../../pigeons/pigeon_api.dart';
+import 'package:qrscan_native/pigeons/platform_api.g.dart'
+    show PlatformVersionApi;
 
 class QRScanPage extends StatefulWidget {
   const QRScanPage({super.key});
@@ -66,10 +65,7 @@ class _QRScanPageState extends State<QRScanPage> {
         return FadeInLeft(
           child: ListTile(
             title: Text(item.getQrType()),
-            subtitle: Text(
-              item.code,
-              overflow: TextOverflow.ellipsis,
-            ),
+            subtitle: Text(item.code, overflow: TextOverflow.ellipsis),
             trailing: Text(item.getHumanReadableDate()),
           ),
         );
@@ -98,8 +94,7 @@ class _QRScanPageState extends State<QRScanPage> {
         try {
           //scanQrCode();
 
-          final version = await PigeonPlugin.platformVersion;
-          print('Resultado PigeonPlugin. Version: $version');
+          await _getPlatformVersion();
         } catch (e) {
           print(e);
         }
@@ -111,21 +106,12 @@ class _QRScanPageState extends State<QRScanPage> {
     );
   }
 
-  void _startQrScanner() async {
-    //_qrScannerApi.startQrScanner();
-    await Future.delayed(Duration(seconds: 2)); // Simula el tiempo de escaneo
-    //_scannedResult = await _qrScannerApi.getScannedResult();
-    setState(() {});
-  }
-
-  void scanQrCode() async {
+  Future<void> _getPlatformVersion() async {
     try {
-      //await _qrScannerApi.startQrScanner();
-      await Future.delayed(Duration(seconds: 2)); // Simula el tiempo de escaneo
-      //_scannedResult = await _qrScannerApi.getScannedResult();
-      print('Resultado del escaneo: $_scannedResult');
-    } on PlatformException catch (e) {
-      print("Error al iniciar escáner: ${e.message}");
+      final version = await PlatformVersionApi().getPlatformVersion();
+      print('Platform Version: ${version.version}');
+    } catch (e) {
+      print('Error: $e');
     }
   }
 }
