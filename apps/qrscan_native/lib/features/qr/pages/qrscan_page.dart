@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qrscan_native/features/qr/blocs/qrhistory/qrhistory_bloc.dart';
-import 'package:qrscan_native/pigeons/pigeon_api.dart';
+import 'package:qrscan_native/pigeons/pigeon_plugin.dart';
+import '../../../pigeons/pigeon_api.dart';
 
 class QRScanPage extends StatefulWidget {
   const QRScanPage({super.key});
@@ -95,7 +96,10 @@ class _QRScanPageState extends State<QRScanPage> {
     return FloatingActionButton(
       onPressed: () async {
         try {
-          scanQrCode();
+          //scanQrCode();
+
+          final version = await PigeonPlugin.platformVersion;
+          print('Resultado PigeonPlugin. Version: $version');
         } catch (e) {
           print(e);
         }
@@ -115,13 +119,13 @@ class _QRScanPageState extends State<QRScanPage> {
   }
 
   void scanQrCode() async {
-  try {
-    //await _qrScannerApi.startQrScanner();
-     await Future.delayed(Duration(seconds: 2)); // Simula el tiempo de escaneo
-    //_scannedResult = await _qrScannerApi.getScannedResult();
-    print('Resultado del escaneo: $_scannedResult');
-  } on PlatformException catch (e) {
-    print("Error al iniciar escáner: ${e.message}");
+    try {
+      //await _qrScannerApi.startQrScanner();
+      await Future.delayed(Duration(seconds: 2)); // Simula el tiempo de escaneo
+      //_scannedResult = await _qrScannerApi.getScannedResult();
+      print('Resultado del escaneo: $_scannedResult');
+    } on PlatformException catch (e) {
+      print("Error al iniciar escáner: ${e.message}");
+    }
   }
-}
 }

@@ -4,11 +4,12 @@ import android.os.Bundle
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.plugin.common.BinaryMessenger
 import android.util.Log
-import com.oscargiraldo000.qrscannative.PigeonApi // Importación añadida
+
 
 class MainActivity : FlutterActivity() {
 
-    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
+    /**
+override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
         PigeonApi.setup(flutterEngine.dartExecutor.binaryMessenger, QrScannerApiImpl())
@@ -47,5 +48,6 @@ class MainActivity : FlutterActivity() {
             }
         }
     }
+ */
 
 }

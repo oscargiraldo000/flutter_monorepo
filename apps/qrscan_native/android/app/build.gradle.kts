@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.oscargiraldo000.qrscannative"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34 //flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -24,8 +24,9 @@ android {
         applicationId = "com.oscargiraldo000.qrscannative"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        //minSdk = flutter.minSdkVersion
+        minSdk = 25 // flutter.minSdkVersion
+        targetSdk = 35 //flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -44,5 +45,6 @@ flutter {
 }
 
 dependencies {
-    implementation('com.journeyapps:zxing-android-embedded:4.3.0')
+    implementation("androidx.appcompat:appcompat:1.6.1") // Para AppCompatActivity
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0") // Para IntentIntegrator e IntentResult
 }
