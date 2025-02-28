@@ -50,6 +50,5 @@ class FlutterQrPlusPlugin : FlutterPlugin, ActivityAware {
     companion object {
         // Identificador del tipo de vista
         private const val VIEW_TYPE_ID = "com.oscargiraldo000.qrscannative/qrview"
-        //private const val VIEW_TYPE_ID = "net.touchcapture.qr.flutterqrplus/qrview"
     }
 }

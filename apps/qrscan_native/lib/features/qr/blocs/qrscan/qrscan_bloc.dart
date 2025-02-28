@@ -10,13 +10,15 @@ part 'qrscan_state.dart';
 class QRScanBloc extends Bloc<QRScanEvent, QRScanState> {
   /// Caso de uso para guardar un código QR.
   final SaveQRCode _saveQrCodeUseCase;
+  bool _isFlashOn = false;
+  bool _isFrontCamera = false;
 
   /// Constructor que inicializa el Bloc con los casos de uso necesarios.
-  QRScanBloc()
-      : _saveQrCodeUseCase = SaveQRCode(),
-        super(InitialScan()) {
+  QRScanBloc() : _saveQrCodeUseCase = SaveQRCode(), super(InitialScan()) {
     // Se suscribe y ignora eventos nuevos si ya hay uno en ejecución.
     on<Scan>(_onScanQR, transformer: droppable());
+    on<ToggleFlash>(_onToggleFlash);
+    on<ToggleCamera>(_onToggleCamera);
   }
 
   /// Método que se ejecuta cuando se escanea un código QR.
@@ -33,5 +35,15 @@ class QRScanBloc extends Bloc<QRScanEvent, QRScanState> {
     } catch (e) {
       emit(ScanFailed('Error al guardar el código QR: ${e.toString()}'));
     }
+  }
+
+  void _onToggleFlash(ToggleFlash event, Emitter<QRScanState> emit) {
+    _isFlashOn = !_isFlashOn;
+    emit(FlashToggled(_isFlashOn));
+  }
+
+  void _onToggleCamera(ToggleCamera event, Emitter<QRScanState> emit) {
+    _isFrontCamera = !_isFrontCamera;
+    emit(CameraToggled(_isFrontCamera));
   }
 }

@@ -35,3 +35,21 @@ class ScanFailed extends QRScanState {
   @override
   List<Object?> get props => [errorMessage];
 }
+
+class FlashToggled extends QRScanState {
+  final bool isFlashOn;
+
+  FlashToggled(this.isFlashOn);
+
+  @override
+  List<Object> get props => [isFlashOn];
+}
+
+class CameraToggled extends QRScanState {
+  final bool isFrontCamera;
+
+  CameraToggled(this.isFrontCamera);
+
+  @override
+  List<Object> get props => [isFrontCamera];
+}
