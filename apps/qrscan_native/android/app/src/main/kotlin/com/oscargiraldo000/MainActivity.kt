@@ -4,24 +4,15 @@ import android.os.Bundle
 import android.os.Build
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugins.PlatformApi
+import io.flutter.plugins.GeneratedPluginRegistrant
 
 class MainActivity : FlutterActivity() {
-/*
-
-    private class PlatformVersionApiImpl : PlatformApi.PlatformVersionApi {
-        override fun getPlatformVersion(): PlatformApi.Version {
-            // Obtener la versión de Android
-            val androidVersion = Build.VERSION.RELEASE
-            // Crear y devolver un objeto Version
-            return PlatformApi.Version(versionString = androidVersion)
-        }
-    }
-
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        // Registrar la implementación de PlatformVersionApi
-        PlatformApi.PlatformVersionApi.setUp(flutterEngine.dartExecutor.binaryMessenger, PlatformVersionApiImpl())
+        GeneratedPluginRegistrant.registerWith(flutterEngine)
+        flutterEngine
+            .platformViewsController
+            .registry
+            .registerViewFactory("com.oscargiraldo000.qrscannative/qrview", QRViewFactory(flutterEngine.dartExecutor.binaryMessenger))
     }
- */
 }

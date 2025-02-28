@@ -1,3 +1,4 @@
+/**
 package com.oscargiraldo000.qrscannative
 
 import androidx.annotation.NonNull
@@ -8,8 +9,10 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
+ */
 
 /** PigeonPlugin */
+/*
 class PigeonPlugin: FlutterPlugin, PlatformApi.PlatformVersionApi {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
@@ -31,3 +34,4 @@ class PigeonPlugin: FlutterPlugin, PlatformApi.PlatformVersionApi {
     return result
   }
 }
+ */

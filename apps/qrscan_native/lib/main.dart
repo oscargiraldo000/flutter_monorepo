@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:qrscan_native/features/qr/blocs/qrhistory/qrhistory_bloc.dart';
-import 'package:qrscan_native/features/qr/pages/qrscan_page.dart';
+import 'package:qrscan_native/features/qr/pages/qr_historial_page.dart';
 import 'package:qrscan_native/features/qr/blocs/qrscan/qrscan_bloc.dart';
 
 void main() async {
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Material App',
-      home: QRScanPage(),
+      home: QRHistorialPage(),
     );
   }
 }

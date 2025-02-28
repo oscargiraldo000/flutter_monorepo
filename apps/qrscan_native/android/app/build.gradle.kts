@@ -19,6 +19,10 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
+    sourceSets {
+        //main.java.srcDirs += 'src/main/kotlin'
+    }
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.oscargiraldo000.qrscannative"
@@ -46,5 +50,8 @@ flutter {
 
 dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1") // Para AppCompatActivity
-    implementation("com.journeyapps:zxing-android-embedded:4.3.0") // Para IntentIntegrator e IntentResult
+    //implementation("com.journeyapps:zxing-android-embedded:4.3.0") { transitive = false } // Para IntentIntegrator e IntentResult
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    //implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version")
+    implementation("com.google.zxing:core:3.5.2")
 }

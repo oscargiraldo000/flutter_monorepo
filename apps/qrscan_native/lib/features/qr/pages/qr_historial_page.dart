@@ -1,21 +1,24 @@
+import 'dart:io';
+
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qrscan_native/core/models/barcode.dart';
 import 'package:qrscan_native/features/qr/blocs/qrhistory/qrhistory_bloc.dart';
+import 'package:qrscan_native/features/qr/pages/qr_scanner_page.dart';
+import 'package:qrscan_native/features/qr/widget/qr_code_scanner.dart';
 import 'package:qrscan_native/pigeons/platform_api.g.dart'
     show PlatformVersionApi;
 
-class QRScanPage extends StatefulWidget {
-  const QRScanPage({super.key});
+class QRHistorialPage extends StatefulWidget {
+  const QRHistorialPage({super.key});
 
   @override
-  State<QRScanPage> createState() => _QRScanPageState();
+  State<QRHistorialPage> createState() => _QRHistorialPageState();
 }
 
-class _QRScanPageState extends State<QRScanPage> {
-  //final  _qrScannerApi = ScannerApi();
-  String _scannedResult = "";
-
+class _QRHistorialPageState extends State<QRHistorialPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +29,32 @@ class _QRScanPageState extends State<QRScanPage> {
       ),
       floatingActionButton: _buildFloatingActionButton(context),
     );
+
+    /**
+     * 
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 5,
+            child: QRView(
+              key: qrKey,
+              onQRViewCreated: _onQRViewCreated,
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: (result != null)
+                  ? Text(
+                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                  : Text('Scan a code'),
+            ),
+          )
+        ],
+      ),
+    );
+     */
   }
 
   Widget _builderHistory(BuildContext context, QRHistoryState state) {
@@ -94,7 +123,16 @@ class _QRScanPageState extends State<QRScanPage> {
         try {
           //scanQrCode();
 
-          await _getPlatformVersion();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) =>
+                      QRScannerPage(), // Reemplaza con tu pantalla de historial
+            ),
+          );
+
+          //await _getPlatformVersion();
         } catch (e) {
           print(e);
         }
@@ -104,14 +142,5 @@ class _QRScanPageState extends State<QRScanPage> {
       },
       child: const Icon(Icons.qr_code),
     );
-  }
-
-  Future<void> _getPlatformVersion() async {
-    try {
-      final version = await PlatformVersionApi().getPlatformVersion();
-      print('Platform Version: ${version.version}');
-    } catch (e) {
-      print('Error: $e');
-    }
   }
 }

@@ -71,6 +71,13 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.oscargiraldo000.qrscannative
+        pluginClass: FlutterQrPlusPlugin
+      ios:
+        pluginClass: FlutterQrPlusPlugin
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
