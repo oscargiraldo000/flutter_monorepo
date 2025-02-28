@@ -14,6 +14,13 @@ class QRHistorialPage extends StatefulWidget {
 
 class _QRHistorialPageState extends State<QRHistorialPage> {
   @override
+  void initState() {
+    super.initState();
+    // Envía el evento LoadHistory al Bloc cuando el widget se inicializa.
+    context.read<QRHistoryBloc>().add(LoadHistory());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('QR Scanner Native')),
@@ -118,11 +125,12 @@ class _QRHistorialPageState extends State<QRHistorialPage> {
     }
   }
 
-  /// Navega a la página del escáner de QR.
+  /// Navega a la página del escáner de QR y elimina todas las demás páginas de la pila.
   void _navigateToQRScannerPage(BuildContext context) {
-    Navigator.push(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => QRScannerPage()),
+      (Route<dynamic> route) => false,
     );
   }
 
