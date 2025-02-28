@@ -2,14 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.oscargiraldo000.qrscannative">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="true" />
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
 
     <application
-        android:label="qrscan_native"
+        android:label="QR Scan OG"
         android:name="${applicationName}"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher">

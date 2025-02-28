@@ -1,15 +1,9 @@
-import 'dart:io';
-
 import 'package:animate_do/animate_do.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qrscan_native/core/models/barcode.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qrscan_native/features/qr/blocs/qrhistory/qrhistory_bloc.dart';
 import 'package:qrscan_native/features/qr/pages/qr_scanner_page.dart';
-import 'package:qrscan_native/features/qr/widget/qr_code_scanner.dart';
-import 'package:qrscan_native/pigeons/platform_api.g.dart'
-    show PlatformVersionApi;
 
 class QRHistorialPage extends StatefulWidget {
   const QRHistorialPage({super.key});
@@ -29,32 +23,6 @@ class _QRHistorialPageState extends State<QRHistorialPage> {
       ),
       floatingActionButton: _buildFloatingActionButton(context),
     );
-
-    /**
-     * 
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: (result != null)
-                  ? Text(
-                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  : Text('Scan a code'),
-            ),
-          )
-        ],
-      ),
-    );
-     */
   }
 
   Widget _builderHistory(BuildContext context, QRHistoryState state) {
@@ -83,7 +51,7 @@ class _QRHistorialPageState extends State<QRHistorialPage> {
 
   Widget _buildHistoryList(LoadedHistory state) {
     if (state.history.isEmpty) {
-      return const Center(child: Text('No hay qr codes escaneados'));
+      return const Center(child: Text('No hay códigos QR escaneados'));
     }
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
@@ -120,27 +88,71 @@ class _QRHistorialPageState extends State<QRHistorialPage> {
   FloatingActionButton _buildFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
       onPressed: () async {
-        try {
-          //scanQrCode();
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder:
-                  (context) =>
-                      QRScannerPage(), // Reemplaza con tu pantalla de historial
-            ),
-          );
-
-          //await _getPlatformVersion();
-        } catch (e) {
-          print(e);
-        }
-        //const String code = 'https://www.google.com';
-        //context.read<QRScanBloc>().add(Scan(code));
-        //context.read<QRHistoryBloc>().add(LoadHistory());
+        await _checkCameraPermission(context);
       },
       child: const Icon(Icons.qr_code),
+    );
+  }
+
+  /// Verifica si la aplicación tiene permiso para usar la cámara.
+  /// Si no tiene permiso, lo solicita. Si el permiso es denegado permanentemente,
+  /// muestra un diálogo para redirigir al usuario a la configuración de la aplicación.
+  Future<void> _checkCameraPermission(BuildContext context) async {
+    final status = await Permission.camera.status;
+
+    if (status.isGranted) {
+      // Si el permiso ya está concedido, navega a la página del escáner.
+      _navigateToQRScannerPage(context);
+    } else if (status.isDenied) {
+      // Si el permiso no está concedido, lo solicita.
+      final result = await Permission.camera.request();
+      if (result.isGranted) {
+        _navigateToQRScannerPage(context);
+      } else if (result.isPermanentlyDenied) {
+        // Si el permiso es denegado permanentemente, muestra un diálogo.
+        _showPermissionDeniedDialog(context);
+      }
+    } else if (status.isPermanentlyDenied) {
+      // Si el permiso fue denegado permanentemente, muestra un diálogo.
+      _showPermissionDeniedDialog(context);
+    }
+  }
+
+  /// Navega a la página del escáner de QR.
+  void _navigateToQRScannerPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => QRScannerPage()),
+    );
+  }
+
+  /// Muestra un diálogo informando que el permiso de la cámara fue denegado permanentemente
+  /// y ofrece la opción de abrir la configuración de la aplicación.
+  void _showPermissionDeniedDialog(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Permiso de cámara denegado'),
+            content: const Text(
+              'Para escanear códigos QR, necesitas conceder permiso para usar la cámara. '
+              'Por favor, habilita el permiso manualmente en la configuración de la aplicación.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancelar'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context); // Cierra el diálogo.
+                  await openAppSettings(); // Abre la configuración de la aplicación.
+                },
+                child: const Text('Abrir configuración'),
+              ),
+            ],
+          ),
     );
   }
 }

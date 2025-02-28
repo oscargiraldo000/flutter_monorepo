@@ -1,6 +1,5 @@
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
-import 'package:injectable/injectable.dart';
 
 /// Caso de uso para obtener el historial de códigos QR.
 //@lazySingleton

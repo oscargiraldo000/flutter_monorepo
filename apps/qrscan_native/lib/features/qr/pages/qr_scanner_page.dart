@@ -29,13 +29,49 @@ class _QRScannerPageState extends State<QRScannerPage> {
 
   void _onQRViewCreated(QRViewController controller, BuildContext context) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData) async {
       if (scanData.code != null) {
-        //context.read<QRScanBloc>().add(Scan(code));
-        final myBloc = BlocProvider.of<QRScanBloc>(context);
-        myBloc.add(Scan((scanData.code!)));
+        // Pausar la cámara cuando se detecta un código QR
+        await controller.pauseCamera();
+
+        // Mostrar un diálogo para preguntar si desea guardar el código
+        final guardar = await _mostrarDialogoGuardarQR(context, scanData.code!);
+
+        if (guardar == true) {
+          // Guardar el código QR en el BLoC
+          final myBloc = BlocProvider.of<QRScanBloc>(context);
+          myBloc.add(Scan(scanData.code!));
+        }
+
+        // Reanudar la cámara después de que el usuario tome una decisión
+        await controller.resumeCamera();
       }
     });
+  }
+
+  Future<bool?> _mostrarDialogoGuardarQR(
+    BuildContext context,
+    String codigoQR,
+  ) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Código QR detectado'),
+          content: Text('¿Deseas guardar el código QR?\n\nCódigo: $codigoQR'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false), // No guardar
+              child: Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true), // Guardar
+              child: Text('Guardar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _verHistorial() {
@@ -60,7 +96,6 @@ class _QRScannerPageState extends State<QRScannerPage> {
       _flashOn = !_flashOn;
       controller?.toggleFlash();
     });
-    // Lógica para encender/apagar el flash
   }
 
   void _toggleCamera() {
@@ -68,7 +103,6 @@ class _QRScannerPageState extends State<QRScannerPage> {
       _frontCamera = !_frontCamera;
       controller?.flipCamera();
     });
-    // Lógica para cambiar entre cámara frontal y trasera
   }
 
   @override
@@ -101,19 +135,6 @@ class _QRScannerPageState extends State<QRScannerPage> {
                       _onQRViewCreated(qrViewController, context),
             ),
           ),
-          /**
-           Expanded(
-            flex: 1,
-            child: Center(
-              child:
-                  (result != null)
-                      ? Text(
-                        'Tipo de código: ${describeEnum(result!.format)}   Datos: ${result!.code}',
-                      )
-                      : Text('Escanea un código'),
-            ),
-          ),
-           */
         ],
       ),
       floatingActionButton: Column(

@@ -1,8 +1,3 @@
-import 'package:core/core.dart';
-import 'package:data/data.dart';
-import 'package:domain/domain.dart';
-import 'package:hive/hive.dart';
-import 'package:injectable/injectable.dart';
 
 /// Módulo de inyección de dependencias para la capa de datos.
 //@module

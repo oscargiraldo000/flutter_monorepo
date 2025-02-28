@@ -7,8 +7,16 @@ class QREntity {
 
   QREntity({required this.code, required this.timestamp});
 
-  String getFormattedTimestamp() {
-    return '${timestamp.day}/${timestamp.month}/${timestamp.year} ${timestamp.hour}:${timestamp.minute}';
+  String getFormattedTimestamp(DateTime timestamp) {
+    int hour = timestamp.hour % 12 == 0
+        ? 12
+        : timestamp.hour % 12; // Convierte a formato 12h
+    String period = timestamp.hour < 12 ? 'AM' : 'PM'; // Determina AM o PM
+    String minute = timestamp.minute
+        .toString()
+        .padLeft(2, '0'); // Asegura que los minutos tengan dos dígitos
+
+    return '${timestamp.day}/${timestamp.month}/${timestamp.year} $hour:$minute $period';
   }
 
 // Método para identificar el tipo de QR

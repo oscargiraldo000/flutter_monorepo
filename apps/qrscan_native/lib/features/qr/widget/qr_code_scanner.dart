@@ -1,23 +1,25 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qrscan_native/core/models/barcode.dart';
+import 'package:qrscan_native/core/models/barcode_format.dart';
+import 'package:qrscan_native/core/models/camera.dart';
+import 'package:qrscan_native/core/models/camera_exception.dart';
 
 import 'lifecycle_event_handler.dart';
 import 'qr_scanner_overlay_shape.dart';
-import 'package:qrscan_native/core/models/barcode.dart';
-import 'package:qrscan_native/core/models/barcode_format.dart';
-import 'package:qrscan_native/core/models/camera_exception.dart';
-import 'package:qrscan_native/core/models/camera.dart';
-import 'package:qrscan_native/core/models/features.dart';
 
+/// Callback que se ejecuta cuando la vista del escáner de QR se ha creado.
+/// Recibe un objeto [QRViewController] para controlar la cámara y el escaneo.
 typedef QRViewCreatedCallback = void Function(QRViewController);
+
+/// Callback que se ejecuta cuando se establecen los permisos de la cámara.
+/// Recibe un objeto [QRViewController] y un booleano que indica si los permisos fueron concedidos.
 typedef PermissionSetCallback = void Function(QRViewController, bool);
 
-/// The [QRView] is the view where the camera
-/// and the barcode scanner gets displayed.
+/// [QRView] es el widget que muestra la cámara y el escáner de códigos QR.
 class QRView extends StatefulWidget {
   const QRView({
     required Key key,
@@ -29,26 +31,24 @@ class QRView extends StatefulWidget {
     this.formatsAllowed = const <BarcodeFormat>[],
   }) : super(key: key);
 
-  /// [onQRViewCreated] gets called when the view is created
+  /// Callback que se ejecuta cuando la vista del escáner de QR se ha creado.
   final QRViewCreatedCallback onQRViewCreated;
 
-  /// Use [overlay] to provide an overlay for the view.
-  /// This can be used to create a certain scan area.
+  /// Overlay personalizado para la vista del escáner.
+  /// Se utiliza para definir un área de escaneo específica.
   final QrScannerOverlayShape? overlay;
 
-  /// Use [overlayMargin] to provide a margin to [overlay]
+  /// Margen aplicado al overlay.
   final EdgeInsetsGeometry overlayMargin;
 
-  /// Set which camera to use on startup.
-  ///
-  /// [cameraFacing] can either be CameraFacing.front or CameraFacing.back.
-  /// Defaults to CameraFacing.back
+  /// Cámara que se utilizará (frontal o trasera).
+  /// Por defecto es la cámara trasera.
   final CameraFacing cameraFacing;
 
-  /// Calls the provided [onPermissionSet] callback when the permission is set.
+  /// Callback que se ejecuta cuando se establecen los permisos de la cámara.
   final PermissionSetCallback? onPermissionSet;
 
-  /// Use [formatsAllowed] to specify which formats needs to be scanned.
+  /// Formatos de códigos de barras permitidos para el escaneo.
   final List<BarcodeFormat> formatsAllowed;
 
   @override
@@ -56,13 +56,14 @@ class QRView extends StatefulWidget {
 }
 
 class _QRViewState extends State<QRView> {
-  MethodChannel? _channel;
-  QRViewController? controller;
-  late LifecycleEventHandler _observer;
+  MethodChannel? _channel; // Canal de comunicación con la plataforma nativa.
+  QRViewController? controller; // Controlador para gestionar la cámara y el escaneo.
+  late LifecycleEventHandler _observer; // Observador del ciclo de vida de la aplicación.
 
   @override
   void initState() {
     super.initState();
+    // Inicializa el observador del ciclo de vida para actualizar las dimensiones cuando la app se reanuda.
     _observer = LifecycleEventHandler(resumeCallBack: updateDimensions);
     WidgetsBinding.instance.addObserver(_observer);
   }
@@ -73,8 +74,8 @@ class _QRViewState extends State<QRView> {
       onNotification: onNotification,
       child: SizeChangedLayoutNotifier(
         child: (widget.overlay != null)
-            ? _getPlatformQrViewWithOverlay()
-            : _getPlatformQrView(),
+            ? _getPlatformQrViewWithOverlay() // Vista con overlay personalizado.
+            : _getPlatformQrView(), // Vista sin overlay.
       ),
     );
   }
@@ -82,10 +83,12 @@ class _QRViewState extends State<QRView> {
   @override
   void dispose() {
     super.dispose();
+    // Elimina el observador del ciclo de vida y libera los recursos del controlador.
     WidgetsBinding.instance.removeObserver(_observer);
     controller?._disposeImpl();
   }
 
+  /// Actualiza las dimensiones del área de escaneo.
   Future<void> updateDimensions() async {
     if (_channel == null) return;
     await QRViewController.updateDimensions(
@@ -93,37 +96,33 @@ class _QRViewState extends State<QRView> {
         overlay: widget.overlay);
   }
 
+  /// Maneja las notificaciones para actualizar las dimensiones.
   bool onNotification(notification) {
     updateDimensions();
     return false;
   }
 
+  /// Retorna la vista del escáner con un overlay personalizado.
   Widget _getPlatformQrViewWithOverlay() {
     return Stack(
       children: [
-        _getPlatformQrView(),
+        _getPlatformQrView(), // Vista del escáner.
         Padding(
           padding: widget.overlayMargin,
           child: Container(
             decoration: ShapeDecoration(
-              shape: widget.overlay!,
+              shape: widget.overlay!, // Aplica el overlay personalizado.
             ),
           ),
-        )
+        ),
       ],
     );
   }
 
+  /// Retorna la vista del escáner según la plataforma (Android, iOS o Web).
   Widget _getPlatformQrView() {
     if (kIsWeb) {
-      return Container();
-      /**
-       return createWebQrView(
-        onPlatformViewCreated: widget.onQRViewCreated,
-        onPermissionSet: widget.onPermissionSet,
-        cameraFacing: widget.cameraFacing,
-      );
-       */
+      return Container(); // Web no está soportado en esta implementación.
     } else {
       switch (defaultTargetPlatform) {
         case TargetPlatform.android:
@@ -144,19 +143,19 @@ class _QRViewState extends State<QRView> {
           );
         default:
           throw UnsupportedError(
-              "Trying to use the default qrview implementation for $defaultTargetPlatform but there isn't a default one");
+              "Plataforma no soportada: $defaultTargetPlatform");
       }
     }
   }
 
+  /// Callback que se ejecuta cuando la vista nativa se ha creado.
   void _onPlatformViewCreated(int id) {
-    if (!mounted) {
-      return;
-    }
+    if (!mounted) return;
 
+    // Crea un canal de comunicación con la plataforma nativa.
     _channel = MethodChannel('com.oscargiraldo000.qrscannative/qrview_$id');
 
-    // Start scan after creation of the view
+    // Inicializa el controlador y comienza el escaneo.
     final newController = QRViewController._(
         _channel!,
         widget.key as GlobalKey<State<StatefulWidget>>?,
@@ -165,15 +164,16 @@ class _QRViewState extends State<QRView> {
       .._startScan(widget.key as GlobalKey<State<StatefulWidget>>,
           widget.overlay, widget.formatsAllowed);
 
-    // Dispose the previous controller if it exists
+    // Libera el controlador anterior si existe.
     controller?._disposeImpl();
     controller = newController;
 
-    // Initialize the controller for controlling the QRView
+    // Notifica que la vista se ha creado.
     widget.onQRViewCreated(newController);
   }
 }
 
+/// Configuración de la cámara para el escáner de QR.
 class _QrCameraSettings {
   _QrCameraSettings({
     this.cameraFacing = CameraFacing.unknown,
@@ -181,6 +181,7 @@ class _QrCameraSettings {
 
   final CameraFacing cameraFacing;
 
+  /// Convierte la configuración a un mapa para enviarla a la plataforma nativa.
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'cameraFacing': cameraFacing.index,
@@ -188,11 +189,13 @@ class _QrCameraSettings {
   }
 }
 
+/// Controlador para gestionar la cámara y el escaneo de códigos QR.
 class QRViewController {
   QRViewController._(MethodChannel channel, GlobalKey? qrKey,
       PermissionSetCallback? onPermissionSet, CameraFacing cameraFacing)
       : _channel = channel,
         _cameraFacing = cameraFacing {
+    // Configura el manejador de llamadas desde la plataforma nativa.
     _channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case 'onRecognizeQR':
@@ -200,14 +203,13 @@ class QRViewController {
             final args = call.arguments as Map;
             final code = args['code'] as String?;
             final rawType = args['type'] as String;
-            // Raw bytes are only supported by Android.
             final rawBytes = args['rawBytes'] as List<int>?;
             final format = BarcodeTypesExtension.fromString(rawType);
             if (format != BarcodeFormat.unknown) {
               final barcode = Barcode(code, format, rawBytes);
-              _scanUpdateController.sink.add(barcode);
+              _scanUpdateController.sink.add(barcode); // Notifica el código escaneado.
             } else {
-              throw Exception('Unexpected barcode type $rawType');
+              throw Exception('Tipo de código QR no reconocido: $rawType');
             }
           }
           break;
@@ -215,60 +217,59 @@ class QRViewController {
           if (call.arguments != null && call.arguments is bool) {
             _hasPermissions = call.arguments;
             if (onPermissionSet != null) {
-              onPermissionSet(this, _hasPermissions);
+              onPermissionSet(this, _hasPermissions); // Notifica el estado de los permisos.
             }
           }
           break;
       }
     });
   }
-  bool disposed = false;
-  final MethodChannel _channel;
-  final CameraFacing _cameraFacing;
-  final StreamController<Barcode> _scanUpdateController =
-      StreamController<Barcode>();
 
+  bool disposed = false; // Indica si el controlador ha sido liberado.
+  final MethodChannel _channel; // Canal de comunicación con la plataforma nativa.
+  final CameraFacing _cameraFacing; // Cámara actualmente en uso.
+  final StreamController<Barcode> _scanUpdateController =
+      StreamController<Barcode>(); // Controlador del stream de códigos escaneados.
+
+  /// Stream que emite los códigos QR escaneados.
   Stream<Barcode> get scannedDataStream => _scanUpdateController.stream;
 
-  bool _hasPermissions = false;
+  bool _hasPermissions = false; // Indica si se han concedido los permisos de la cámara.
   bool get hasPermissions => _hasPermissions;
 
-  /// Starts the barcode scanner
+  /// Inicia el escaneo de códigos QR.
   Future<void> _startScan(GlobalKey key, QrScannerOverlayShape? overlay,
       List<BarcodeFormat>? barcodeFormats) async {
-    // We need to update the dimension before the scan is started.
     try {
       await QRViewController.updateDimensions(key, _channel, overlay: overlay);
-      return await _channel.invokeMethod(
+      await _channel.invokeMethod(
           'startScan', barcodeFormats?.map((e) => e.asInt()).toList() ?? []);
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
     }
   }
 
-  /// Gets information about which camera is active.
+  /// Obtiene información sobre la cámara activa.
   Future<CameraFacing> getCameraInfo() async {
     try {
       var cameraFacing = await _channel.invokeMethod('getCameraInfo') as int;
       if (cameraFacing == -1) return _cameraFacing;
-      return CameraFacing
-          .values[await _channel.invokeMethod('getCameraInfo') as int];
+      return CameraFacing.values[cameraFacing];
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
     }
   }
 
-  /// Flips the camera between available modes
+  /// Cambia entre la cámara frontal y trasera.
   Future<CameraFacing> flipCamera() async {
     try {
-      return CameraFacing
-          .values[await _channel.invokeMethod('flipCamera') as int];
+      return CameraFacing.values[await _channel.invokeMethod('flipCamera') as int];
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
     }
   }
 
-  /// Get flashlight status
+  /// Obtiene el estado del flash.
   Future<bool?> getFlashStatus() async {
     try {
       return await _channel.invokeMethod('getFlashInfo');
@@ -277,16 +278,16 @@ class QRViewController {
     }
   }
 
-  /// Toggles the flashlight between available modes
+  /// Activa o desactiva el flash.
   Future<void> toggleFlash() async {
     try {
-      await _channel.invokeMethod('toggleFlash') as bool?;
+      await _channel.invokeMethod('toggleFlash');
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
     }
   }
 
-  /// Pauses the camera and barcode scanning
+  /// Pausa la cámara y el escaneo.
   Future<void> pauseCamera() async {
     try {
       await _channel.invokeMethod('pauseCamera');
@@ -295,7 +296,7 @@ class QRViewController {
     }
   }
 
-  /// Stops barcode scanning and the camera
+  /// Detiene la cámara y el escaneo.
   Future<void> stopCamera() async {
     try {
       await _channel.invokeMethod('stopCamera');
@@ -304,7 +305,7 @@ class QRViewController {
     }
   }
 
-  /// Resumes barcode scanning
+  /// Reanuda la cámara y el escaneo.
   Future<void> resumeCamera() async {
     try {
       await _channel.invokeMethod('resumeCamera');
@@ -313,53 +314,18 @@ class QRViewController {
     }
   }
 
-  /// Returns which features are available on device.
-  Future<SystemFeatures> getSystemFeatures() async {
-    try {
-      var features =
-          await _channel.invokeMapMethod<String, dynamic>('getSystemFeatures');
-      if (features != null) {
-        return SystemFeatures.fromJson(features);
-      }
-      throw CameraException('Error', 'Could not get system features');
-    } on PlatformException catch (e) {
-      throw CameraException(e.code, e.message);
-    }
-  }
-
-  @Deprecated(
-    "Disposing the QRViewController is no longer necessary. The controller will self-dispose when the QRView is un-mounted.",
-  )
-  void dispose() {
-    // NO-OP | Function kept for backward compatibility
-    // QRViewController will self-dispose when the QRView is disposed
-    log(
-      "It is not required to call dispose() on QRViewController anymore. It will be auto disposed.",
-      name: "qr_code_scanner_plus",
-      level: 900, // warning
-    );
-  }
-
-  /// Stops the camera and disposes the barcode stream.
+  /// Libera los recursos del controlador.
   void _disposeImpl() {
-    if (disposed) {
-      log(
-        "QRViewController was disposed more than once",
-        name: "qr_code_scanner_plus",
-        level: 900, // warning
-      );
-      return;
-    }
+    if (disposed) return;
     disposed = true;
     if (defaultTargetPlatform == TargetPlatform.iOS) stopCamera();
-    _scanUpdateController.close();
+    _scanUpdateController.close(); // Cierra el stream de códigos escaneados.
   }
 
-  /// Updates the view dimensions for iOS.
+  /// Actualiza las dimensiones del área de escaneo en la plataforma nativa.
   static Future<bool> updateDimensions(GlobalKey key, MethodChannel channel,
       {QrScannerOverlayShape? overlay}) async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      // Add small delay to ensure the render box is loaded
       await Future.delayed(const Duration(milliseconds: 300));
       if (key.currentContext == null) return false;
       final renderBox = key.currentContext!.findRenderObject() as RenderBox;
@@ -376,9 +342,7 @@ class QRViewController {
         throw CameraException(e.code, e.message);
       }
     } else if (defaultTargetPlatform == TargetPlatform.android) {
-      if (overlay == null) {
-        return false;
-      }
+      if (overlay == null) return false;
       await channel.invokeMethod('changeScanArea', {
         'scanAreaWidth': overlay.cutOutWidth,
         'scanAreaHeight': overlay.cutOutHeight,
@@ -389,12 +353,11 @@ class QRViewController {
     return false;
   }
 
-  //Starts/Stops invert scanning.
+  /// Invierte el escaneo (solo en Android).
   Future<void> scanInvert(bool isScanInvert) async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       try {
-        await _channel
-            .invokeMethod('invertScan', {"isInvertScan": isScanInvert});
+        await _channel.invokeMethod('invertScan', {"isInvertScan": isScanInvert});
       } on PlatformException catch (e) {
         throw CameraException(e.code, e.message);
       }

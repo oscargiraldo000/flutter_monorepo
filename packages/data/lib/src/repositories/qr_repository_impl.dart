@@ -1,8 +1,6 @@
-import 'dart:math';
 
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
-import 'package:injectable/injectable.dart';
 
 //@LazySingleton(as: QRRepository)
 class QRRepositoryImpl implements QRRepository {

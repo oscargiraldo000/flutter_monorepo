@@ -7,6 +7,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugins.GeneratedPluginRegistrant
 
 class MainActivity : FlutterActivity() {
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         GeneratedPluginRegistrant.registerWith(flutterEngine)
@@ -15,4 +16,5 @@ class MainActivity : FlutterActivity() {
             .registry
             .registerViewFactory("com.oscargiraldo000.qrscannative/qrview", QRViewFactory(flutterEngine.dartExecutor.binaryMessenger))
     }
+
 }

@@ -1,6 +1,5 @@
 import 'package:data/data.dart';
 import 'package:hive/hive.dart';
-import 'package:injectable/injectable.dart';
 
 //@module
 abstract class HiveModule {
