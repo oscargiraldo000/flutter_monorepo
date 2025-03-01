@@ -4,16 +4,16 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-part 'qrhistory_event.dart';
-part 'qrhistory_state.dart';
+part 'historical_bloc_event.dart';
+part 'historical_bloc_state.dart';
 
 /// Bloc que maneja los eventos y estados relacionados con el escaneo de códigos QR.
-class QRHistoryBloc extends Bloc<QRHistoryEvent, QRHistoryState> {
+class HistoricalBloc extends Bloc<HistoricalBlocEvent, HistoricalBlocState> {
   // Caso de uso para obtener el historial de códigos QR escaneados.
   final GetQRHistory _getHistoryQrUseCase;
 
   /// Constructor que inicializa el Bloc con los casos de uso necesarios.
-  QRHistoryBloc()
+  HistoricalBloc()
       : _getHistoryQrUseCase = GetQRHistory(),
         super(InitialHistory()) {
     // Se suscribe y cancela el evento actual si llega uno nuevo y ejecuta el nuevo.
@@ -22,7 +22,7 @@ class QRHistoryBloc extends Bloc<QRHistoryEvent, QRHistoryState> {
 
   /// Maneja el evento de escanear un código QR.
   /// Emite estados de carga, éxito o error según el resultado.
-  void _onLoadHistory(LoadHistory event, Emitter<QRHistoryState> emit) async {
+  void _onLoadHistory(LoadHistory event, Emitter<HistoricalBlocState> emit) async {
     // Se emite el estado de carga.
     emit(InProgressHistory());
     try {

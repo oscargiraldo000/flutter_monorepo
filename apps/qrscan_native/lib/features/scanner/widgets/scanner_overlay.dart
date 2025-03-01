@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:qrscan_native/features/qr/widgets/qr_scanner_overlay_painter.dart';
-import 'package:qrscan_native/features/qr/widgets/qr_scanner_overlay_shape.dart';
+import 'package:qrscan_native/features/scanner/widgets/scanner_overlay_painter.dart';
 
-class QrScannerOverlay extends StatefulWidget {
+class ScannerOverlay extends StatefulWidget {
+  const ScannerOverlay({super.key});
+
   @override
-  _QrScannerOverlayState createState() => _QrScannerOverlayState();
+  _ScannerOverlayState createState() => _ScannerOverlayState();
 }
 
-class _QrScannerOverlayState extends State<QrScannerOverlay>
+class _ScannerOverlayState extends State<ScannerOverlay>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -32,9 +33,9 @@ class _QrScannerOverlayState extends State<QrScannerOverlay>
       animation: _controller,
       builder: (context, child) {
         return CustomPaint(
-          painter: QrScannerOverlayPainter(
-            cutOutWidth: 250,
-            cutOutHeight: 250,
+          painter: QrScannerOverlayPainter.ScannerOverlayPainter(
+            cutOutWidth: 300,
+            cutOutHeight: 300,
             scanLineProgress: _controller.value,
           ),
           size: Size.infinite,

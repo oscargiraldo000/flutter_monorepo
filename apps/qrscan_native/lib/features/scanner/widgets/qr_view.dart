@@ -9,7 +9,7 @@ import 'package:qrscan_native/core/models/camera.dart';
 import 'package:qrscan_native/core/models/camera_exception.dart';
 
 import 'lifecycle_event_handler.dart';
-import 'qr_scanner_overlay_shape.dart';
+import 'scanner_overlay_shape.dart';
 
 /// Callback que se ejecuta cuando la vista del escáner de QR se ha creado.
 /// Recibe un objeto [QRViewController] para controlar la cámara y el escaneo.
@@ -36,7 +36,7 @@ class QRView extends StatefulWidget {
 
   /// Overlay personalizado para la vista del escáner.
   /// Se utiliza para definir un área de escaneo específica.
-  final QrScannerOverlayShape? overlay;
+  final ScannerOverlayShape? overlay;
 
   /// Margen aplicado al overlay.
   final EdgeInsetsGeometry overlayMargin;
@@ -238,7 +238,7 @@ class QRViewController {
   bool get hasPermissions => _hasPermissions;
 
   /// Inicia el escaneo de códigos QR.
-  Future<void> _startScan(GlobalKey key, QrScannerOverlayShape? overlay,
+  Future<void> _startScan(GlobalKey key, ScannerOverlayShape? overlay,
       List<BarcodeFormat>? barcodeFormats) async {
     try {
       await QRViewController.updateDimensions(key, _channel, overlay: overlay);
@@ -324,7 +324,7 @@ class QRViewController {
 
   /// Actualiza las dimensiones del área de escaneo en la plataforma nativa.
   static Future<bool> updateDimensions(GlobalKey key, MethodChannel channel,
-      {QrScannerOverlayShape? overlay}) async {
+      {ScannerOverlayShape? overlay}) async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       await Future.delayed(const Duration(milliseconds: 300));
       if (key.currentContext == null) return false;

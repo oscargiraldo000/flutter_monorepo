@@ -3,19 +3,18 @@ import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qrscan_native/features/qr/widgets/qr_code_scanner.dart';
 
-part 'qrscan_event.dart';
-part 'qrscan_state.dart';
+part 'scanner_bloc_event.dart';
+part 'scanner_bloc_state.dart';
 
-class QRScanBloc extends Bloc<QRScanEvent, QRScanState> {
+class ScannerBloc extends Bloc<ScannerEvent, ScannerState> {
   /// Caso de uso para guardar un código QR.
   final SaveQRCode _saveQrCodeUseCase;
   bool _isFlashOn = false;
   bool _isFrontCamera = false;
 
   /// Constructor que inicializa el Bloc con los casos de uso necesarios.
-  QRScanBloc() : _saveQrCodeUseCase = SaveQRCode(), super(InitialScan()) {
+  ScannerBloc() : _saveQrCodeUseCase = SaveQRCode(), super(InitialScan()) {
     // Se suscribe y ignora eventos nuevos si ya hay uno en ejecución.
     on<Scan>(_onScanQR, transformer: droppable());
     on<ToggleFlash>(_onToggleFlash, transformer: sequential());
@@ -23,7 +22,7 @@ class QRScanBloc extends Bloc<QRScanEvent, QRScanState> {
   }
 
   /// Método que se ejecuta cuando se escanea un código QR.
-  void _onScanQR(Scan event, Emitter<QRScanState> emit) async {
+  void _onScanQR(Scan event, Emitter<ScannerState> emit) async {
     // Se emite el estado de carga.
     emit(ScanInProgress());
     try {
@@ -38,12 +37,12 @@ class QRScanBloc extends Bloc<QRScanEvent, QRScanState> {
     }
   }
 
-  void _onToggleFlash(ToggleFlash event, Emitter<QRScanState> emit) {
+  void _onToggleFlash(ToggleFlash event, Emitter<ScannerState> emit) {
     _isFlashOn = !_isFlashOn;
     emit(FlashToggled(_isFlashOn));
   }
 
-  void _onToggleCamera(ToggleCamera event, Emitter<QRScanState> emit) {
+  void _onToggleCamera(ToggleCamera event, Emitter<ScannerState> emit) {
     _isFrontCamera = !_isFrontCamera;
     emit(CameraToggled(_isFrontCamera));
   }

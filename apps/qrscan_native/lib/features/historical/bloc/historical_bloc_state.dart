@@ -1,20 +1,20 @@
-part of 'qrhistory_bloc.dart';
+part of 'historical_bloc.dart';
 
 /// Clase base para todos los estados relacionados con el escaneo de QR.@immutable
 @immutable
-sealed class QRHistoryState extends Equatable {
+sealed class HistoricalBlocState extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
 /// Estado inicial del escaneo de QR.
-class InitialHistory extends QRHistoryState {}
+class InitialHistory extends HistoricalBlocState {}
 
 /// Estado cuando el escaneo de QR está cargando.
-class InProgressHistory extends QRHistoryState {}
+class InProgressHistory extends HistoricalBlocState {}
 
 /// Estado cuando el escaneo de QR ha sido exitoso.
-class LoadedHistory extends QRHistoryState {
+class LoadedHistory extends HistoricalBlocState {
   // Historial de escaneos de QR.
   final List<QREntity> history;
 
@@ -24,7 +24,7 @@ class LoadedHistory extends QRHistoryState {
   List<Object?> get props => [history];
 }
 
-class FailedHistory extends QRHistoryState {
+class FailedHistory extends HistoricalBlocState {
   // Mensaje de error.
   final String errorMessage;
 

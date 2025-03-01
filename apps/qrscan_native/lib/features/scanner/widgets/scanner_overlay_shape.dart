@@ -1,16 +1,11 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
-
 /// Clase que define la forma y el diseño de la superposición del escáner de QR.
 /// Permite personalizar el color del borde, el ancho del borde, el color de la superposición,
 /// el radio de las esquinas, la longitud del borde, el tamaño del área de recorte, el degradado y más.
-class QrScannerOverlayShape extends ShapeBorder {
+@immutable
+class ScannerOverlayShape extends ShapeBorder {
   /// Constructor de la clase.
   ///
   /// [borderColor]: Color del borde del área de escaneo. Por defecto es rojo.
@@ -29,7 +24,7 @@ class QrScannerOverlayShape extends ShapeBorder {
   /// [gradient]: Degradado para el área de escaneo. Por defecto es un degradado transparente.
   /// [scanLineColor]: Color de la línea de escaneo. Por defecto es blanco.
   /// [scanLineHeight]: Altura de la línea de escaneo. Por defecto es 2.0.
-  QrScannerOverlayShape({
+  ScannerOverlayShape({
     this.borderColor = Colors.red,
     this.borderWidth = 3.0,
     this.overlayColor = const Color.fromRGBO(0, 0, 0, 0.5),
@@ -48,11 +43,12 @@ class QrScannerOverlayShape extends ShapeBorder {
     ),
     this.scanLineColor = Colors.white,
     this.scanLineHeight = 2.0,
-  })  : cutOutWidth = cutOutWidth ?? cutOutSize ?? 250,
-        cutOutHeight = cutOutHeight ?? cutOutSize ?? 250 {
+  }) : cutOutWidth = cutOutWidth ?? cutOutSize ?? 250,
+       cutOutHeight = cutOutHeight ?? cutOutSize ?? 250 {
     // Validación para asegurar que la longitud del borde no sea mayor que el área de recorte.
     assert(
-      borderLength <= min(this.cutOutWidth, this.cutOutHeight) / 2 + borderWidth * 2,
+      borderLength <=
+          min(this.cutOutWidth, this.cutOutHeight) / 2 + borderWidth * 2,
       "La longitud del borde no puede ser mayor que ${min(this.cutOutWidth, this.cutOutHeight) / 2 + borderWidth * 2}",
     );
 
@@ -71,7 +67,8 @@ class QrScannerOverlayShape extends ShapeBorder {
   final double borderLength; // Longitud de los bordes en las esquinas.
   final double cutOutWidth; // Ancho del área de recorte.
   final double cutOutHeight; // Alto del área de recorte.
-  final double cutOutBottomOffset; // Desplazamiento vertical del área de recorte.
+  final double
+  cutOutBottomOffset; // Desplazamiento vertical del área de recorte.
   final bool isBorderAnimated; // Si el borde debe animarse.
   final Color borderAnimationColor; // Color de la animación del borde.
   final String helpText; // Texto de ayuda para el usuario.
@@ -105,74 +102,87 @@ class QrScannerOverlayShape extends ShapeBorder {
     final width = rect.width;
     final height = rect.height;
     final borderOffset = borderWidth / 2;
-    final _borderLength = min(borderLength, min(cutOutWidth, cutOutHeight) / 2);
-    final _cutOutWidth = min(cutOutWidth, width - borderOffset * 2);
-    final _cutOutHeight = min(cutOutHeight, height - borderOffset * 2);
+    double borderLength = 0;
+    double cutOutWidth = 0;
+    double cutOutHeight = 0;
+    borderLength = min(borderLength, min(cutOutWidth, cutOutHeight) / 2);
+    cutOutWidth = min(cutOutWidth, width - borderOffset * 2);
+    cutOutHeight = min(cutOutHeight, height - borderOffset * 2);
 
     // Define el rectángulo de recorte.
     final cutOutRect = Rect.fromLTWH(
-      rect.left + width / 2 - _cutOutWidth / 2,
-      rect.top + height / 2 - _cutOutHeight / 2 - cutOutBottomOffset,
-      _cutOutWidth,
-      _cutOutHeight,
+      rect.left + width / 2 - cutOutWidth / 2,
+      rect.top + height / 2 - cutOutHeight / 2 - cutOutBottomOffset,
+      cutOutWidth,
+      cutOutHeight,
     );
 
     // Dibuja la superposición.
-    final backgroundPaint = Paint()
-      ..color = overlayColor
-      ..style = PaintingStyle.fill;
+    final backgroundPaint =
+        Paint()
+          ..color = overlayColor
+          ..style = PaintingStyle.fill;
     canvas.drawRect(rect, backgroundPaint);
 
     // Dibuja el área de recorte.
-    final cutOutPaint = Paint()
-      ..color = Colors.transparent
-      ..blendMode = BlendMode.dstOut;
+    final cutOutPaint =
+        Paint()
+          ..color = Colors.transparent
+          ..blendMode = BlendMode.dstOut;
     canvas.drawRRect(
       RRect.fromRectAndRadius(cutOutRect, Radius.circular(borderRadius)),
       cutOutPaint,
     );
 
     // Dibuja el degradado dentro del área de escaneo.
-    final gradientPaint = Paint()
-      ..shader = gradient.createShader(cutOutRect)
-      ..style = PaintingStyle.fill;
+    final gradientPaint =
+        Paint()
+          ..shader = gradient.createShader(cutOutRect)
+          ..style = PaintingStyle.fill;
     canvas.drawRRect(
       RRect.fromRectAndRadius(cutOutRect, Radius.circular(borderRadius)),
       gradientPaint,
     );
 
     // Dibuja los bordes.
-    final borderPaint = Paint()
-      ..color = borderColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = borderWidth;
-    _drawBorderCorners(canvas, cutOutRect, borderPaint, _borderLength);
+    final borderPaint =
+        Paint()
+          ..color = borderColor
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = borderWidth;
+    _drawBorderCorners(canvas, cutOutRect, borderPaint, borderLength);
 
     // Dibuja la animación del borde si está habilitada.
     if (isBorderAnimated) {
-      final animationPaint = Paint()
-        ..color = borderAnimationColor
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = borderWidth
-        ..shader = LinearGradient(
-          colors: [borderAnimationColor.withOpacity(0), borderAnimationColor],
-          stops: const [0.0, 1.0],
-        ).createShader(Rect.fromLTWH(0, 0, _cutOutWidth, _cutOutHeight));
+      final animationPaint =
+          Paint()
+            ..color = borderAnimationColor
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = borderWidth
+            ..shader = LinearGradient(
+              colors: [
+                borderAnimationColor.withOpacity(0),
+                borderAnimationColor,
+              ],
+              stops: const [0.0, 1.0],
+            ).createShader(Rect.fromLTWH(0, 0, cutOutWidth, cutOutHeight));
 
-      final animationPath = Path()
-        ..moveTo(cutOutRect.left, cutOutRect.top)
-        ..lineTo(cutOutRect.right, cutOutRect.top)
-        ..lineTo(cutOutRect.right, cutOutRect.bottom)
-        ..lineTo(cutOutRect.left, cutOutRect.bottom)
-        ..close();
+      final animationPath =
+          Path()
+            ..moveTo(cutOutRect.left, cutOutRect.top)
+            ..lineTo(cutOutRect.right, cutOutRect.top)
+            ..lineTo(cutOutRect.right, cutOutRect.bottom)
+            ..lineTo(cutOutRect.left, cutOutRect.bottom)
+            ..close();
 
       canvas.drawPath(animationPath, animationPaint);
     }
 
     // Dibuja la línea de escaneo.
-    final scanLinePaint = Paint()
-      ..color = scanLineColor
-      ..strokeWidth = scanLineHeight;
+    final scanLinePaint =
+        Paint()
+          ..color = scanLineColor
+          ..strokeWidth = scanLineHeight;
 
     // Calcula la posición vertical de la línea de escaneo.
     final scanLineY = cutOutRect.top + (cutOutRect.height * _scanLineProgress);
@@ -205,7 +215,12 @@ class QrScannerOverlayShape extends ShapeBorder {
   }
 
   /// Método auxiliar para dibujar los bordes en las esquinas.
-  void _drawBorderCorners(Canvas canvas, Rect rect, Paint paint, double borderLength) {
+  void _drawBorderCorners(
+    Canvas canvas,
+    Rect rect,
+    Paint paint,
+    double borderLength,
+  ) {
     final cornerRadius = Radius.circular(borderRadius);
 
     // Esquina superior izquierda.
@@ -259,7 +274,7 @@ class QrScannerOverlayShape extends ShapeBorder {
 
   @override
   ShapeBorder scale(double t) {
-    return QrScannerOverlayShape(
+    return ScannerOverlayShape(
       borderColor: borderColor,
       borderWidth: borderWidth,
       overlayColor: overlayColor,

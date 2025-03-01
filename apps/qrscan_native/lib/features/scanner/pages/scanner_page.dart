@@ -1,16 +1,18 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qrscan_native/features/qr/blocs/qrscan/qrscan_bloc.dart';
-import 'package:qrscan_native/features/qr/pages/qr_historial_page.dart';
-import 'package:qrscan_native/features/qr/widgets/qr_code_scanner.dart';
-import 'package:qrscan_native/features/qr/widgets/qr_scanner_overlay.dart';
-import 'package:qrscan_native/features/qr/widgets/qr_scanner_overlay_shape.dart'; // Para SystemNavigator.pop()
+import 'package:qrscan_native/features/scanner/bloc/scanner_bloc.dart';
+import 'package:qrscan_native/features/historical/pages/historical_page.dart';
+import 'package:qrscan_native/features/scanner/widgets/qr_view.dart';
+import 'package:qrscan_native/features/scanner/widgets/scanner_overlay.dart';
+import 'package:qrscan_native/features/scanner/widgets/scanner_overlay_shape.dart';
+// Para SystemNavigator.pop()
 
-class QRScannerPage extends StatelessWidget {
+class ScannerPage extends StatelessWidget {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  bool _isDialogShowing = false; // Variable de control
+  bool _isDialogShowing = false;
+
+  ScannerPage({super.key}); // Variable de control
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +26,17 @@ class QRScannerPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Escáner de QR'),
         actions: [
-          BlocBuilder<QRScanBloc, QRScanState>(
+          BlocBuilder<ScannerBloc, ScannerState>(
             builder: (context, state) {
               final isFlashOn = state is FlashToggled ? state.isFlashOn : false;
               return IconButton(
                 icon: Icon(isFlashOn ? Icons.flash_on : Icons.flash_off),
-                onPressed: () => context.read<QRScanBloc>().add(ToggleFlash()),
+                onPressed: () => context.read<ScannerBloc>().add(ToggleFlash()),
                 tooltip: isFlashOn ? 'Apagar flash' : 'Encender flash',
               );
             },
           ),
-          BlocBuilder<QRScanBloc, QRScanState>(
+          BlocBuilder<ScannerBloc, ScannerState>(
             builder: (context, state) {
               final isFrontCamera =
                   state is CameraToggled ? state.isFrontCamera : false;
@@ -42,7 +44,7 @@ class QRScannerPage extends StatelessWidget {
                 icon: Icon(
                   isFrontCamera ? Icons.camera_front : Icons.camera_rear,
                 ),
-                onPressed: () => context.read<QRScanBloc>().add(ToggleCamera()),
+                onPressed: () => context.read<ScannerBloc>().add(ToggleCamera()),
                 tooltip:
                     isFrontCamera
                         ? 'Usar cámara trasera'
@@ -57,6 +59,7 @@ class QRScannerPage extends StatelessWidget {
           // QRView ocupa toda la pantalla
           Positioned.fill(
             child: QRView(
+              //overlay: QrScannerOverlayShape(),
               key: qrKey,
               onQRViewCreated: (qrViewController) {
                 _onQRViewCreated(qrViewController, context);
@@ -64,7 +67,7 @@ class QRScannerPage extends StatelessWidget {
             ),
           ),
           // Superposición centrada para el escáner
-          Center(child: QrScannerOverlay()),
+          Center(child: ScannerOverlay()),
         ],
       ),
       floatingActionButton: Column(
@@ -73,8 +76,8 @@ class QRScannerPage extends StatelessWidget {
           FloatingActionButton(
             heroTag: 'historialButton',
             onPressed: () => _verHistorial(context),
-            child: Icon(Icons.history),
             tooltip: 'Ver historial',
+            child: Icon(Icons.history),
           ),
           SizedBox(height: 10),
           //buildBtnSalir(),
@@ -87,33 +90,10 @@ class QRScannerPage extends StatelessWidget {
     return FloatingActionButton(
           heroTag: 'salirButton',
           onPressed: _salir,
-          child: Icon(Icons.exit_to_app),
           tooltip: 'Salir',
           backgroundColor: Colors.red,
+          child: Icon(Icons.exit_to_app),
         );
-  }
-
-  void _onQRViewCreated(QRViewController controller, BuildContext context) {
-    controller.scannedDataStream.listen((scanData) async {
-      if (scanData.code != null) {
-        await controller.pauseCamera();
-        final guardar = await _mostrarDialogoGuardarQR(context, scanData.code!);
-        if (guardar == true) {
-          context.read<QRScanBloc>().add(Scan(scanData.code!));
-        }
-        await controller.resumeCamera();
-      }
-    });
-
-    // Configurar el flash y la cámara
-    context.read<QRScanBloc>().stream.listen((state) {
-      if (state is FlashToggled) {
-        controller.toggleFlash();
-      }
-      if (state is CameraToggled) {
-        controller.flipCamera();
-      }
-    });
   }
 
   Future<bool?> _mostrarDialogoGuardarQR(
@@ -152,7 +132,7 @@ class QRScannerPage extends StatelessWidget {
         final qrCode = scanData.code!;
         final guardar = await _mostrarDialogoGuardarQR(context, scanData.code!);
         if (guardar == true) {
-          context.read<QRScanBloc>().add(Scan(qrCode));
+          context.read<ScannerBloc>().add(Scan(qrCode));
         }
         // Reanuda la cámara
         await controller.resumeCamera();
@@ -162,7 +142,7 @@ class QRScannerPage extends StatelessWidget {
     });
 
     // Configurar el flash y la cámara
-    context.read<QRScanBloc>().stream.listen((state) {
+    context.read<ScannerBloc>().stream.listen((state) {
       if (state is FlashToggled) {
         controller.toggleFlash();
       }
@@ -172,36 +152,10 @@ class QRScannerPage extends StatelessWidget {
     });
   }
 
-  Future<bool?> _mostrarDialogoGuardarQR(
-    BuildContext context,
-    String codigoQR,
-  ) async {
-    return showDialog<bool>(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Código QR detectado'),
-          content: Text('¿Deseas guardar el código QR?\n\nCódigo: $codigoQR'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Text('Cancelar'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: Text('Guardar'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _verHistorial(BuildContext context) {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => QRHistorialPage()),
+      MaterialPageRoute(builder: (context) => HistoricalPage()),
       (Route<dynamic> route) => false,
     );
   }

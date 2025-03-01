@@ -1,9 +1,9 @@
+/**
 package com.oscargiraldo000.qrscannative
 
 import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
-import io.flutter.plugins.PlatformApi
 
 class PlatformVersionApiPlugin : FlutterPlugin, PlatformApi.PlatformVersionApi {
 
@@ -27,3 +27,4 @@ class PlatformVersionApiPlugin : FlutterPlugin, PlatformApi.PlatformVersionApi {
         }
     }
 }
+ */

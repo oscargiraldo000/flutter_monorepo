@@ -2,29 +2,29 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:qrscan_native/features/qr/blocs/qrhistory/qrhistory_bloc.dart';
-import 'package:qrscan_native/features/qr/pages/qr_scanner_page.dart';
+import 'package:qrscan_native/features/historical/bloc/historical_bloc.dart';
+import 'package:qrscan_native/features/scanner/pages/scanner_page.dart';
 
-class QRHistorialPage extends StatefulWidget {
-  const QRHistorialPage({super.key});
+class HistoricalPage extends StatefulWidget {
+  const HistoricalPage({super.key});
 
   @override
-  State<QRHistorialPage> createState() => _QRHistorialPageState();
+  State<HistoricalPage> createState() => _HistoricalPageState();
 }
 
-class _QRHistorialPageState extends State<QRHistorialPage> {
+class _HistoricalPageState extends State<HistoricalPage> {
   @override
   void initState() {
     super.initState();
     // Envía el evento LoadHistory al Bloc cuando el widget se inicializa.
-    context.read<QRHistoryBloc>().add(LoadHistory());
+    context.read<HistoricalBloc>().add(LoadHistory());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('QR Scanner Native')),
-      body: BlocConsumer<QRHistoryBloc, QRHistoryState>(
+      body: BlocConsumer<HistoricalBloc, HistoricalBlocState>(
         builder: _builderHistory,
         listener: _listenerHistory,
       ),
@@ -32,7 +32,7 @@ class _QRHistorialPageState extends State<QRHistorialPage> {
     );
   }
 
-  Widget _builderHistory(BuildContext context, QRHistoryState state) {
+  Widget _builderHistory(BuildContext context, HistoricalBlocState state) {
     if (state is InitialHistory || state is InProgressHistory) {
       return _buildLoading();
     } else if (state is LoadedHistory) {
@@ -81,7 +81,7 @@ class _QRHistorialPageState extends State<QRHistorialPage> {
     return Center(child: Text(errorMessage));
   }
 
-  void _listenerHistory(BuildContext context, QRHistoryState state) {
+  void _listenerHistory(BuildContext context, HistoricalBlocState state) {
     if (state is FailedHistory) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -101,24 +101,26 @@ class _QRHistorialPageState extends State<QRHistorialPage> {
     );
   }
 
-  /// Verifica y solicita permisos de la cámara.
+  /// Verifica si la aplicación tiene permiso para usar la cámara.
+  /// Si no tiene permiso, lo solicita. Si el permiso es denegado permanentemente,
+  /// muestra un diálogo para redirigir al usuario a la configuración de la aplicación.
   Future<void> _checkCameraPermission(BuildContext context) async {
     final status = await Permission.camera.status;
 
     if (status.isGranted) {
-      // Permiso ya concedido, navega al escáner.
+      // Si el permiso ya está concedido, navega a la página del escáner.
       _navigateToQRScannerPage(context);
-    } else if (status.isDenied || status.isRestricted) {
-      // Permiso no concedido o restringido, solicita permiso.
+    } else if (status.isDenied) {
+      // Si el permiso no está concedido, lo solicita.
       final result = await Permission.camera.request();
       if (result.isGranted) {
         _navigateToQRScannerPage(context);
       } else if (result.isPermanentlyDenied) {
-        // Permiso denegado permanentemente, muestra diálogo.
+        // Si el permiso es denegado permanentemente, muestra un diálogo.
         _showPermissionDeniedDialog(context);
       }
     } else if (status.isPermanentlyDenied) {
-      // Permiso denegado permanentemente, muestra diálogo.
+      // Si el permiso fue denegado permanentemente, muestra un diálogo.
       _showPermissionDeniedDialog(context);
     }
   }
@@ -127,7 +129,7 @@ class _QRHistorialPageState extends State<QRHistorialPage> {
   void _navigateToQRScannerPage(BuildContext context) {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => QRScannerPage()),
+      MaterialPageRoute(builder: (context) => ScannerPage()),
       (Route<dynamic> route) => false,
     );
   }
