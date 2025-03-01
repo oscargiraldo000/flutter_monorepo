@@ -4,13 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qrscan_native/features/qr/blocs/qrscan/qrscan_bloc.dart';
 import 'package:qrscan_native/features/qr/pages/qr_historial_page.dart';
-import 'package:qrscan_native/features/qr/widget/qr_code_scanner.dart'; // Para SystemNavigator.pop()
+import 'package:qrscan_native/features/qr/widgets/qr_code_scanner.dart';
+import 'package:qrscan_native/features/qr/widgets/qr_scanner_overlay.dart';
+import 'package:qrscan_native/features/qr/widgets/qr_scanner_overlay_shape.dart'; // Para SystemNavigator.pop()
 
 class QRScannerPage extends StatelessWidget {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  bool _isDialogShowing = false; // Variable de control
 
   @override
   Widget build(BuildContext context) {
+    var scanArea =
+        (MediaQuery.of(context).size.width < 400 ||
+                MediaQuery.of(context).size.height < 400)
+            ? 150.0
+            : 300.0;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Escáner de QR'),
@@ -43,17 +52,19 @@ class QRScannerPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
+      body: Stack(
+        children: [
+          // QRView ocupa toda la pantalla
+          Positioned.fill(
             child: QRView(
               key: qrKey,
-              onQRViewCreated:
-                  (qrViewController) =>
-                      _onQRViewCreated(qrViewController, context),
+              onQRViewCreated: (qrViewController) {
+                _onQRViewCreated(qrViewController, context);
+              },
             ),
           ),
+          // Superposición centrada para el escáner
+          Center(child: QrScannerOverlay()),
         ],
       ),
       floatingActionButton: Column(
@@ -80,24 +91,31 @@ class QRScannerPage extends StatelessWidget {
 
   void _onQRViewCreated(QRViewController controller, BuildContext context) {
     controller.scannedDataStream.listen((scanData) async {
-      if (scanData.code != null) {
+      if (scanData.code != null && !_isDialogShowing) {
+        // Bloquea la apertura de más diálogos
+        _isDialogShowing = true;
+        // Pausa la cámara
         await controller.pauseCamera();
+        final qrCode = scanData.code!;
         final guardar = await _mostrarDialogoGuardarQR(context, scanData.code!);
         if (guardar == true) {
-          context.read<QRScanBloc>().add(Scan(scanData.code!));
+          context.read<QRScanBloc>().add(Scan(qrCode));
         }
+        // Reanuda la cámara
         await controller.resumeCamera();
+        // Libera el bloqueo cuando se cierra el diálogo
+        _isDialogShowing = false;
       }
+    });
 
-      // Configurar el flash y la cámara
-      context.read<QRScanBloc>().stream.listen((state) {
-        if (state is FlashToggled) {
-          controller.toggleFlash();
-        }
-        if (state is CameraToggled) {
-          controller.flipCamera();
-        }
-      });
+    // Configurar el flash y la cámara
+    context.read<QRScanBloc>().stream.listen((state) {
+      if (state is FlashToggled) {
+        controller.toggleFlash();
+      }
+      if (state is CameraToggled) {
+        controller.flipCamera();
+      }
     });
   }
 
@@ -106,6 +124,7 @@ class QRScannerPage extends StatelessWidget {
     String codigoQR,
   ) async {
     return showDialog<bool>(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(

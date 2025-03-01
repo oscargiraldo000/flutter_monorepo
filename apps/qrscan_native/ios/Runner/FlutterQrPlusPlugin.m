@@ -1,17 +1,23 @@
-// Importa el archivo de cabecera de la clase FlutterQrPlusPlugin.
+//
+//  FlutterQrPlusPlugin.m
+//  Runner
+//
+//  Created by Oscar Giraldo on 28/02/25.
+//
+
+#import <Flutter/Flutter.h>
 #import "FlutterQrPlusPlugin.h"
+#import "Runner-Swift.h" // Asegúrate de que este encabezado esté generado correctamente
 
-// Importa directamente el archivo de cabecera generado por Swift.
-// Esto asume que el archivo está disponible en el proyecto.
-#import "qr_code_scanner_plus-Swift.h"
-
-// Implementación de la clase FlutterQrPlusPlugin.
 @implementation FlutterQrPlusPlugin
 
-// Método estático para registrar el plugin en Flutter.
+// Método para registrar el plugin con el registrar de Flutter
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-    // Llama al método de registro de la clase SwiftFlutterQrPlusPlugin.
-    [SwiftFlutterQrPlusPlugin registerWithRegistrar:registrar];
+    @try {
+        [SwiftFlutterQrPlusPlugin registerWithRegistrar:registrar];
+    } @catch (NSException *exception) {
+        NSLog(@"Error al registrar el plugin: %@", exception.reason);
+    }
 }
 
 @end

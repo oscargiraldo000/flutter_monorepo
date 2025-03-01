@@ -1,3 +1,10 @@
+//
+//  FlutterQrPlusPlugin.h
+//  Runner
+//
+//  Created by Oscar Giraldo on 28/02/25.
+//
+
 // Importa el framework de Flutter para poder utilizar las clases y métodos necesarios.
 #import <Flutter/Flutter.h>
 

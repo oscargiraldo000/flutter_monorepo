@@ -12,6 +12,10 @@
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		67CA04DCFB7D5A3DFAEC1FD4 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE0EDBE666FEBB61DA25A991 /* Pods_Runner.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
+		7E078F842D726369006A8980 /* QRViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E078F832D726368006A8980 /* QRViewFactory.swift */; };
+		7E078F862D7263DF006A8980 /* QRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E078F852D7263DD006A8980 /* QRView.swift */; };
+		7E078F882D72641A006A8980 /* SwiftFlutterQrPlusPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E078F872D726419006A8980 /* SwiftFlutterQrPlusPlugin.swift */; };
+		7E078F8B2D7264A1006A8980 /* FlutterQrPlusPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E078F8A2D72649E006A8980 /* FlutterQrPlusPlugin.m */; };
 		848044CA2F954E93FCD4E9E6 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A7316CD266D9A33E6FF2A0 /* Pods_RunnerTests.framework */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -52,6 +56,11 @@
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
+		7E078F832D726368006A8980 /* QRViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRViewFactory.swift; sourceTree = "<group>"; };
+		7E078F852D7263DD006A8980 /* QRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRView.swift; sourceTree = "<group>"; };
+		7E078F872D726419006A8980 /* SwiftFlutterQrPlusPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftFlutterQrPlusPlugin.swift; sourceTree = "<group>"; };
+		7E078F892D72646B006A8980 /* FlutterQrPlusPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlutterQrPlusPlugin.h; sourceTree = "<group>"; };
+		7E078F8A2D72649E006A8980 /* FlutterQrPlusPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlutterQrPlusPlugin.m; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
 		9740EEB31CF90195004384FC /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
 		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,6 +148,11 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				7E078F8A2D72649E006A8980 /* FlutterQrPlusPlugin.m */,
+				7E078F892D72646B006A8980 /* FlutterQrPlusPlugin.h */,
+				7E078F872D726419006A8980 /* SwiftFlutterQrPlusPlugin.swift */,
+				7E078F852D7263DD006A8980 /* QRView.swift */,
+				7E078F832D726368006A8980 /* QRViewFactory.swift */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -394,8 +408,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E078F8B2D7264A1006A8980 /* FlutterQrPlusPlugin.m in Sources */,
+				7E078F842D726369006A8980 /* QRViewFactory.swift in Sources */,
+				7E078F862D7263DF006A8980 /* QRView.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				7E078F882D72641A006A8980 /* SwiftFlutterQrPlusPlugin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
