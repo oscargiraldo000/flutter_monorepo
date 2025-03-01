@@ -3,6 +3,7 @@ import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qrscan_native/features/qr/widgets/qr_code_scanner.dart';
 
 part 'qrscan_event.dart';
 part 'qrscan_state.dart';
@@ -17,8 +18,8 @@ class QRScanBloc extends Bloc<QRScanEvent, QRScanState> {
   QRScanBloc() : _saveQrCodeUseCase = SaveQRCode(), super(InitialScan()) {
     // Se suscribe y ignora eventos nuevos si ya hay uno en ejecución.
     on<Scan>(_onScanQR, transformer: droppable());
-    on<ToggleFlash>(_onToggleFlash);
-    on<ToggleCamera>(_onToggleCamera);
+    on<ToggleFlash>(_onToggleFlash, transformer: sequential());
+    on<ToggleCamera>(_onToggleCamera, transformer: sequential());
   }
 
   /// Método que se ejecuta cuando se escanea un código QR.

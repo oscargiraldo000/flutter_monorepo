@@ -13,7 +13,8 @@ sealed class QRScanEvent extends Equatable {
 class Scan extends QRScanEvent {
   final String qrData;
 
-  const Scan(this.qrData);
+  /// Constructor que inicializa el evento con el código QR escaneado.
+  Scan(this.qrData);
 
   @override
   List<Object> get props => [qrData];

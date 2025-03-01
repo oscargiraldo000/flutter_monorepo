@@ -2,48 +2,134 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleDisplayName</key>
-	<string>Qrscan Native</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>qrscan_native</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
+    <!--
+        Configuración para mejorar el rendimiento gráfico en dispositivos iPhone.
+        CADisableMinimumFrameDurationOnPhone permite desactivar la limitación de fps en iPhone.
+    -->
+    <key>CADisableMinimumFrameDurationOnPhone</key>
+    <true/>
+
+    <!--
+        Región de desarrollo. Define el idioma predeterminado para la aplicación.
+        $(DEVELOPMENT_LANGUAGE) se reemplaza automáticamente con el idioma configurado en Xcode.
+    -->
+    <key>CFBundleDevelopmentRegion</key>
+    <string>$(DEVELOPMENT_LANGUAGE)</string>
+
+    <!--
+        Nombre de la aplicación que se muestra debajo del ícono en el dispositivo.
+    -->
+    <key>CFBundleDisplayName</key>
+    <string>QR Scan OG</string>
+
+    <!--
+        Nombre del ejecutable de la aplicación.
+        $(EXECUTABLE_NAME) se reemplaza automáticamente con el nombre del ejecutable.
+    -->
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+
+    <!--
+        Identificador único de la aplicación (Bundle ID).
+        $(PRODUCT_BUNDLE_IDENTIFIER) se reemplaza automáticamente con el ID configurado en Xcode.
+    -->
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
+    <!--
+        Versión del diccionario de información. No es necesario modificarlo.
+    -->
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+
+    <!--
+        Nombre interno de la aplicación.
+    -->
+    <key>CFBundleName</key>
+    <string>qrscan_native</string>
+
+    <!--
+        Tipo de paquete. APPL indica que es una aplicación.
+    -->
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <!--
+        Versión pública de la aplicación (por ejemplo, 1.0.0).
+        $(FLUTTER_BUILD_NAME) se reemplaza con la versión configurada en Flutter.
+    -->
+    <key>CFBundleShortVersionString</key>
+    <string>$(FLUTTER_BUILD_NAME)</string>
+
+    <!--
+        Firma del paquete. No es necesario modificarlo.
+    -->
+    <key>CFBundleSignature</key>
+    <string>????</string>
+
+    <!--
+        Número de compilación de la aplicación (por ejemplo, 1).
+        $(FLUTTER_BUILD_NUMBER) se reemplaza con el número de compilación configurado en Flutter.
+    -->
+    <key>CFBundleVersion</key>
+    <string>$(FLUTTER_BUILD_NUMBER)</string>
+
+    <!--
+        Indica que la aplicación solo es compatible con dispositivos iOS.
+    -->
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+
+    <!--
+        Descripción de uso de la cámara. Este mensaje se muestra al usuario cuando se solicita permiso para acceder a la cámara.
+    -->
+    <key>NSCameraUsageDescription</key>
+    <string>Esta aplicación necesita acceso a la cámara para escanear códigos QR.</string>
+
+    <!--
+        Soporte para eventos de entrada indirecta (como teclados externos).
+    -->
+    <key>UIApplicationSupportsIndirectInputEvents</key>
+    <true/>
+
+    <!--
+        Nombre del archivo de storyboard para la pantalla de inicio (LaunchScreen).
+    -->
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
+
+    <!--
+        Nombre del archivo de storyboard principal.
+    -->
+    <key>UIMainStoryboardFile</key>
+    <string>Main</string>
+
+    <!--
+        Orientaciones de interfaz soportadas en iPhone.
+    -->
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string> <!-- Vertical -->
+        <string>UIInterfaceOrientationLandscapeLeft</string> <!-- Horizontal izquierda -->
+        <string>UIInterfaceOrientationLandscapeRight</string> <!-- Horizontal derecha -->
+    </array>
+
+    <!--
+        Orientaciones de interfaz soportadas en iPad.
+    -->
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string> <!-- Vertical -->
+        <string>UIInterfaceOrientationPortraitUpsideDown</string> <!-- Vertical invertida -->
+        <string>UIInterfaceOrientationLandscapeLeft</string> <!-- Horizontal izquierda -->
+        <string>UIInterfaceOrientationLandscapeRight</string> <!-- Horizontal derecha -->
+    </array>
+
+    <!--
+        Habilita la vista previa de vistas incrustadas de Flutter.
+        Necesario para usar widgets nativos en Flutter.
+    -->
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
 </dict>
 </plist>

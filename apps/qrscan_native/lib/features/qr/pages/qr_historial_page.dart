@@ -101,26 +101,24 @@ class _QRHistorialPageState extends State<QRHistorialPage> {
     );
   }
 
-  /// Verifica si la aplicación tiene permiso para usar la cámara.
-  /// Si no tiene permiso, lo solicita. Si el permiso es denegado permanentemente,
-  /// muestra un diálogo para redirigir al usuario a la configuración de la aplicación.
+  /// Verifica y solicita permisos de la cámara.
   Future<void> _checkCameraPermission(BuildContext context) async {
     final status = await Permission.camera.status;
 
     if (status.isGranted) {
-      // Si el permiso ya está concedido, navega a la página del escáner.
+      // Permiso ya concedido, navega al escáner.
       _navigateToQRScannerPage(context);
-    } else if (status.isDenied) {
-      // Si el permiso no está concedido, lo solicita.
+    } else if (status.isDenied || status.isRestricted) {
+      // Permiso no concedido o restringido, solicita permiso.
       final result = await Permission.camera.request();
       if (result.isGranted) {
         _navigateToQRScannerPage(context);
       } else if (result.isPermanentlyDenied) {
-        // Si el permiso es denegado permanentemente, muestra un diálogo.
+        // Permiso denegado permanentemente, muestra diálogo.
         _showPermissionDeniedDialog(context);
       }
     } else if (status.isPermanentlyDenied) {
-      // Si el permiso fue denegado permanentemente, muestra un diálogo.
+      // Permiso denegado permanentemente, muestra diálogo.
       _showPermissionDeniedDialog(context);
     }
   }

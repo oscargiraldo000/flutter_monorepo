@@ -1,6 +1,6 @@
-# melos_managed_dependency_overrides: data,core
+# melos_managed_dependency_overrides: core,data
 dependency_overrides:
-  data:
-    path: ../data
   core:
     path: ../core
+  data:
+    path: ../data
