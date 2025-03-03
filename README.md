@@ -1,4 +1,4 @@
-# 🏗 Base Structure - FLUTTER_MONOREPO
+# 🏗 App QR Scan Native - FLUTTER_MONOREPO
 
 Este repositorio define la estructura base para un **monorepo en Flutter** siguiendo las mejores prácticas de **Clean Architecture**, **BLoC** para el manejo de estado y **GetIt + Injectable** para la inyección de dependencias.
 
