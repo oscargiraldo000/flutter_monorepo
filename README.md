@@ -283,3 +283,23 @@ A continuación se muestran algunas evidencias de las pruebas unitarias ejecutad
 Las pruebas unitarias se encuentran en el directorio `test/` y cubren diferentes aspectos de la aplicación, incluyendo la lógica de negocio y la interfaz de usuario.
 
 Para más detalles sobre las pruebas específicas, revisa los archivos de prueba en el directorio `test/`.
+
+## 📚 Librerías Utilizadas
+
+### Dependencias
+- `flutter_bloc: ^9.0.0`: Para el manejo de estado utilizando el patrón BLoC.
+- `hive: ^2.2.3`: Para el almacenamiento local de datos.
+- `hive_flutter: ^1.1.0`: Integración de Hive con Flutter.
+- `get_it: ^8.0.3`: Para la inyección de dependencias.
+- `injectable: ^2.5.0`: Generador de código para la inyección de dependencias.
+- `path_provider: ^2.1.5`: Para acceder a rutas del sistema de archivos en dispositivos móviles.
+
+### Dependencias de Desarrollo
+- `flutter_test`: Para escribir y ejecutar pruebas unitarias.
+- `flutter_lints: ^5.0.0`: Conjunto de reglas de linting para mantener un código limpio.
+- `build_runner: ^2.4.15`: Herramienta para generar código automáticamente.
+- `injectable_generator: ^2.7.0`: Generador de código para `injectable`.
+
+## 🛠 Uso de Código Nativo
+
+Este proyecto también utiliza código nativo en Kotlin e iOS con Pigeon para la comunicación entre Flutter y el código nativo. Pigeon facilita la generación de código para la comunicación entre Flutter y las plataformas nativas, asegurando una integración fluida y eficiente.
