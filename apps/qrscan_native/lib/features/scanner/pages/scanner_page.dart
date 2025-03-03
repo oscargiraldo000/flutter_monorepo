@@ -1,11 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:qrscan_native/features/scanner/bloc/scanner_bloc.dart';
 import 'package:qrscan_native/features/historical/pages/historical_page.dart';
+import 'package:qrscan_native/features/scanner/bloc/scanner_bloc.dart';
 import 'package:qrscan_native/features/scanner/widgets/qr_view.dart';
 import 'package:qrscan_native/features/scanner/widgets/scanner_overlay.dart';
-import 'package:qrscan_native/features/scanner/widgets/scanner_overlay_shape.dart';
 // Para SystemNavigator.pop()
 
 class ScannerPage extends StatelessWidget {
@@ -44,7 +42,8 @@ class ScannerPage extends StatelessWidget {
                 icon: Icon(
                   isFrontCamera ? Icons.camera_front : Icons.camera_rear,
                 ),
-                onPressed: () => context.read<ScannerBloc>().add(ToggleCamera()),
+                onPressed:
+                    () => context.read<ScannerBloc>().add(ToggleCamera()),
                 tooltip:
                     isFrontCamera
                         ? 'Usar cámara trasera'
@@ -88,12 +87,12 @@ class ScannerPage extends StatelessWidget {
 
   FloatingActionButton buildBtnSalir() {
     return FloatingActionButton(
-          heroTag: 'salirButton',
-          onPressed: _salir,
-          tooltip: 'Salir',
-          backgroundColor: Colors.red,
-          child: Icon(Icons.exit_to_app),
-        );
+      heroTag: 'salirButton',
+      onPressed: _salir,
+      tooltip: 'Salir',
+      backgroundColor: Colors.red,
+      child: Icon(Icons.exit_to_app),
+    );
   }
 
   Future<bool?> _mostrarDialogoGuardarQR(

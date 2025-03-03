@@ -9,12 +9,12 @@ part 'scanner_bloc_state.dart';
 
 class ScannerBloc extends Bloc<ScannerEvent, ScannerState> {
   /// Caso de uso para guardar un código QR.
-  final SaveQRCode _saveQrCodeUseCase;
+  late SaveQRCode _saveQrCodeUseCase;
   bool _isFlashOn = false;
   bool _isFrontCamera = false;
 
   /// Constructor que inicializa el Bloc con los casos de uso necesarios.
-  ScannerBloc() : _saveQrCodeUseCase = SaveQRCode(), super(InitialScan()) {
+  ScannerBloc({SaveQRCode? saveQrCodeUseCase}) : _saveQrCodeUseCase = saveQrCodeUseCase ?? SaveQRCode(), super(InitialScan()) {
     // Se suscribe y ignora eventos nuevos si ya hay uno en ejecución.
     on<Scan>(_onScanQR, transformer: droppable());
     on<ToggleFlash>(_onToggleFlash, transformer: sequential());

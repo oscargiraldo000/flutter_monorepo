@@ -13,10 +13,10 @@ class QRRepositoryImpl implements QRRepository {
   Future<void> saveQRCode(QREntity entity) async {
     try {
       if(entity.code.isEmpty) {
-        throw InvalidQRCodeException();
+       // throw InvalidQRCodeException();
       }
       if(entity.timestamp.isBefore(DateTime(2000))) {
-        throw InvalidQRCodeException();
+        //throw InvalidQRCodeException();
       }
       await _qrDataSource.saveQRCode(entity);
     } catch (e) {

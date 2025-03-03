@@ -16,17 +16,6 @@ class SaveQRCode {
   /// Lanza [SaveQRCodeException] si ocurre un error al guardar el código QR
   Future<void> call(QREntity entity) async {
     try {
-      // Validación de que el código no esté vacío
-      if (entity.code.isEmpty) {
-        //throw InvalidQRCodeException();
-        throw Exception('Código QR inválido');
-      }
-      // Validación de que el timestamp sea posterior al año 2000
-      if (entity.timestamp.isBefore(DateTime(2000))) {
-        //throw InvalidQRCodeException();
-        throw Exception('Timestamp inválido');
-      }
-      Future.delayed(Duration(seconds: 2));
       // Llamada al repositorio para guardar el código QR
       await QRRepositoryImpl().saveQRCode(entity);
     } catch (e) {

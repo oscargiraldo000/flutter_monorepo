@@ -69,7 +69,6 @@ Si agregas una nueva feature que será usada en varias apps, colócala en `packa
 
 Cualquier duda o sugerencia, ¡bienvenido a contribuir! 💙
 
-
 ## 📖 Flujo de Trabajo Recomendado
 
 Este flujo de trabajo está diseñado para ayudarte a gestionar el monorepo de manera eficiente, desde la configuración inicial hasta la implementación de cambios. Sigue estos pasos para mantener un código limpio, funcional y bien estructurado.
@@ -222,3 +221,65 @@ Este comando ejecuta `dart run build_runner watch` en todos los paquetes.
 10. **Cobertura**: `melos run test-coverage` (opcional)
 11. **Actualización de Dependencias**: `melos run upgrade` (opcional)
 12. **Modo Observador**: `melos run generate` (opcional, si trabajas con `build_runner`)
+
+## Configuración y Ejecución de la Aplicación
+
+### Requisitos Previos
+- [Flutter](https://flutter.dev/docs/get-started/install) (versión recomendada: 2.5.0 o superior)
+- [Dart](https://dart.dev/get-dart) (versión recomendada: 2.14.0 o superior)
+
+### Configuración
+1. Clona el repositorio:
+    ```sh
+    git clone https://github.com/tu_usuario/flutter_monorepo.git
+    cd flutter_monorepo
+    ```
+
+2. Instala las dependencias:
+    ```sh
+    flutter pub get
+    ```
+
+### Ejecución
+1. Conecta un dispositivo físico o inicia un emulador.
+2. Configuración Inicial:
+    ```sh
+    melos run setup
+    ```
+3. Limpieza:
+    ```sh
+    `melos run clean` (opcional, si es necesario)
+    ```
+4. Generación de Código:
+    ```sh
+    `melos run build-runner`
+    ```
+5. Pruebas
+    ```sh
+    melos run test
+    ```
+6. Directorio de aplicación QR:
+    ```sh
+    cd \apps\qrscan_native
+    ```
+
+---
+
+## Pruebas Unitarias
+
+### Ejecución de Pruebas
+Para ejecutar las pruebas unitarias, utiliza el siguiente comando:
+```sh
+flutter test
+```
+
+### Evidencias de las Pruebas Unitarias
+A continuación se muestran algunas evidencias de las pruebas unitarias ejecutadas:
+
+```sh
+00:03 +7: All tests passed!
+```
+
+Las pruebas unitarias se encuentran en el directorio `test/` y cubren diferentes aspectos de la aplicación, incluyendo la lógica de negocio y la interfaz de usuario.
+
+Para más detalles sobre las pruebas específicas, revisa los archivos de prueba en el directorio `test/`.
