@@ -2,6 +2,17 @@
 
 Este repositorio define la estructura base para un **monorepo en Flutter** siguiendo las mejores prácticas de **Clean Architecture**, **BLoC** para el manejo de estado y **GetIt + Injectable** para la inyección de dependencias.
 
+## Demostración de la funcionalidad
+![GIF de demostración](https://github.com/oscargiraldo000/flutter_monorepo/tree/main/screenshots/ios_video.gif)
+
+## 📸 Capturas de Pantalla
+
+![Pantalla Principal Historial de QRs](screenshots/ios_screenshots_4.jpg)
+*Historial de QR guardados*
+
+![Pantalla de Escaneo de QR](screenshots/ios_screenshots_1.jpg)
+*Escanear un QR*
+
 ## 📂 Estructura del Monorepo
 
 ```plaintext
@@ -303,3 +314,11 @@ Para más detalles sobre las pruebas específicas, revisa los archivos de prueba
 ## 🛠 Uso de Código Nativo
 
 Este proyecto también utiliza código nativo en Kotlin e iOS con Pigeon para la comunicación entre Flutter y el código nativo. Pigeon facilita la generación de código para la comunicación entre Flutter y las plataformas nativas, asegurando una integración fluida y eficiente.
+
+## 📥 Descargar APK
+
+Puedes descargar la última versión de la APK desde el siguiente enlace de Google Drive:
+
+[Descargar APK](https://drive.google.com/drive/folders/1iGF9w0afsfFT99k2b32xWjByVjEuLjlP?usp=sharing)
+
+
