@@ -2,8 +2,8 @@
 
 Este repositorio define la estructura base para un **monorepo en Flutter** siguiendo las mejores prácticas de **Clean Architecture**, **BLoC** para el manejo de estado y **GetIt + Injectable** para la inyección de dependencias.
 
-## Demostración de la funcionalidad
-![GIF de demostración](https://github.com/oscargiraldo000/flutter_monorepo/tree/main/screenshots/ios_video.gif)
+## 🎥 Demostración de la funcionalidad
+![GIF de demostración](https://github.com/oscargiraldo000/flutter_monorepo/raw/main/screenshots/ios_video.gif)
 
 ## 📸 Capturas de Pantalla
 
